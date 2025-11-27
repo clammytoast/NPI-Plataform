@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPI Profiler - Create Your Digital Mind</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/questionnaire.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="screen active">
+            <div class="container">
+                <h1>NPI Profiler</h1>
+                <p class="subtitle">Create Your Nurture Profile Intelligence</p>
+                <div class="welcome-content">
+                    <p>This guided process will help build a digital brain based on your life experiences, personality, and values.</p>
+                    <p><strong>Time required:</strong> 30-45 minutes</p>
+                    <button id="start-btn" class="btn-primary">Begin Creation</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Questionnaire Screen -->
+        <div id="questionnaire-screen" class="screen">
+            <div class="container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                
+                <div class="question-section">
+                    <h2 id="section-title">Developmental History</h2>
+                    <div id="question-container">
+                        <!-- Questions will be injected here -->
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button id="prev-btn" class="btn-secondary">Previous</button>
+                    <button id="next-btn" class="btn-primary">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analysis Screen -->
+        <div id="analysis-screen" class="screen">
+            <div class="container">
+                <h2>Building Your NPI Brain</h2>
+                <div id="analysis-progress">
+                    <div class="analysis-step">
+                        <span class="step-icon">🧠</span>
+                        <span class="step-text">Analyzing responses...</span>
+                    </div>
+                    <div class="analysis-step">
+                        <span class="step-icon">📊</span>
+                        <span class="step-text">Mapping neural pathways...</span>
+                    </div>
+                    <div class="analysis-step">
+                        <span class="step-icon">⚖️</span>
+                        <span class="step-text">Building moral framework...</span>
+                    </div>
+                    <div class="analysis-step">
+                        <span class="step-icon">🎭</span>
+                        <span class="step-text">Configuring personality...</span>
+                    </div>
+                </div>
+                <div id="brain-preview"></div>
+            </div>
+        </div>
+
+        <!-- Export Screen -->
+        <div id="export-screen" class="screen">
+            <div class="container">
+                <h2>Your NPI Brain is Ready!</h2>
+                <div class="npi-summary">
+                    <div id="npi-stats"></div>
+                    <div id="brain-visualization"></div>
+                </div>
+                <div class="export-options">
+                    <button id="export-btn" class="btn-primary">Download .npibrain File</button>
+                    <button id="avatar-btn" class="btn-secondary">Continue to Avatar Creator</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/questionnaire-engine.js"></script>
+    <script src="js/personality-analyzer.js"></script>
+    <script src="js/brain-generator.js"></script>
+    <script src="js/exporter.js"></script>
+</body>
+</html>
