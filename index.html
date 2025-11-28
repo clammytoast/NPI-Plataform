@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NPI Platform - Create Your Digital Mind</title>
+    <script src="auth.js"></script>
     <style>
         /* === GLOBAL STYLES === */
         * {
@@ -20,6 +21,7 @@
             --white: #ffffff;
             --accent: #667eea;
             --success: #48bb78;
+            --error: #e53e3e;
         }
 
         body {
@@ -87,6 +89,7 @@
         .nav-actions {
             display: flex;
             gap: 1rem;
+            align-items: center;
         }
 
         /* === BUTTON STYLES === */
@@ -309,12 +312,26 @@
         }
 
         .form-error {
-            color: #e53e3e;
+            color: var(--error);
             font-size: 0.9rem;
             display: none;
         }
 
         .form-error.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message.show {
             display: block;
         }
 
@@ -646,6 +663,8 @@
             <h1 class="text-center">Welcome Back</h1>
             <p class="text-center" style="color: var(--secondary); margin-bottom: 2rem;">Sign in to your NPI account</p>
             
+            <div class="success-message" id="login-success"></div>
+            
             <div class="auth-form">
                 <div class="form-group">
                     <label class="form-label">Email</label>
@@ -672,6 +691,8 @@
             <h1 class="text-center">Create Account</h1>
             <p class="text-center" style="color: var(--secondary); margin-bottom: 2rem;">Join the NPI community</p>
             
+            <div class="success-message" id="register-success"></div>
+            
             <div class="auth-form">
                 <div class="form-group">
                     <label class="form-label">Full Name</label>
@@ -685,7 +706,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Password</label>
-                    <input type="password" id="register-password" class="form-input" placeholder="Minimum 8 characters">
+                    <input type="password" id="register-password" class="form-input" placeholder="Minimum 6 characters">
                     <div class="form-error" id="register-password-error"></div>
                 </div>
                 <div class="form-group">
@@ -740,11 +761,10 @@
     </div>
 
     <script>
-        // === COMPLETE NPI PLATFORM ===
+        // === COMPLETE NPI PLATFORM WITH REAL AUTH ===
         class NPIPlatform {
             constructor() {
                 this.currentUser = null;
-                this.isAuthenticated = false;
                 this.initializeApp();
             }
 
@@ -755,10 +775,8 @@
             }
 
             checkAuthState() {
-                const user = localStorage.getItem('npi_user');
-                if (user) {
-                    this.currentUser = JSON.parse(user);
-                    this.isAuthenticated = true;
+                this.currentUser = auth.getCurrentUser();
+                if (this.currentUser) {
                     this.showScreen('dashboard-screen');
                 }
             }
@@ -766,9 +784,9 @@
             updateNavigation() {
                 const navActions = document.getElementById('nav-actions');
                 
-                if (this.isAuthenticated) {
+                if (this.currentUser) {
                     navActions.innerHTML = `
-                        <span style="color: var(--primary);">Hi, ${this.currentUser?.name}</span>
+                        <span style="color: var(--primary);">Hi, ${this.currentUser.name}</span>
                         <button class="btn btn-secondary" onclick="app.showScreen('dashboard-screen')">Dashboard</button>
                         <button class="btn btn-primary" onclick="app.logout()">Sign Out</button>
                     `;
@@ -786,7 +804,7 @@
 
             showScreen(screenId) {
                 // Don't show dashboard to non-authenticated users
-                if (screenId === 'dashboard-screen' && !this.isAuthenticated) {
+                if (screenId === 'dashboard-screen' && !this.currentUser) {
                     this.showScreen('login-screen');
                     return;
                 }
@@ -815,22 +833,18 @@
                     return;
                 }
 
-                // Simulate API call
-                this.showLoading(true);
-                await this.delay(1000);
-
-                this.currentUser = {
-                    id: 'user_' + Date.now(),
-                    name: email.split('@')[0],
-                    email: email,
-                    createdAt: new Date().toISOString()
-                };
-
-                localStorage.setItem('npi_user', JSON.stringify(this.currentUser));
-                this.isAuthenticated = true;
-                this.showScreen('dashboard-screen');
-                this.updateNavigation();
-                this.showLoading(false);
+                try {
+                    this.showLoading(true);
+                    const user = await auth.login(email, password);
+                    this.currentUser = user;
+                    this.showScreen('dashboard-screen');
+                    this.updateNavigation();
+                    this.showSuccess('login-success', `Welcome back, ${user.name}!`);
+                } catch (error) {
+                    this.showError('login-password-error', error.message);
+                } finally {
+                    this.showLoading(false);
+                }
             }
 
             async register() {
@@ -853,8 +867,8 @@
                     this.showError('register-password-error', 'Password is required');
                     return;
                 }
-                if (password.length < 8) {
-                    this.showError('register-password-error', 'Password must be at least 8 characters');
+                if (password.length < 6) {
+                    this.showError('register-password-error', 'Password must be at least 6 characters');
                     return;
                 }
                 if (password !== confirm) {
@@ -862,47 +876,37 @@
                     return;
                 }
 
-                this.showLoading(true);
-                await this.delay(1000);
-
-                this.currentUser = {
-                    id: 'user_' + Date.now(),
-                    name: name,
-                    email: email,
-                    createdAt: new Date().toISOString()
-                };
-
-                localStorage.setItem('npi_user', JSON.stringify(this.currentUser));
-                this.isAuthenticated = true;
-                this.showScreen('dashboard-screen');
-                this.updateNavigation();
-                this.showLoading(false);
+                try {
+                    this.showLoading(true);
+                    const user = await auth.register(email, password, name);
+                    this.currentUser = user;
+                    this.showScreen('dashboard-screen');
+                    this.updateNavigation();
+                    this.showSuccess('register-success', `Welcome to NPI Platform, ${user.name}!`);
+                } catch (error) {
+                    this.showError('register-email-error', error.message);
+                } finally {
+                    this.showLoading(false);
+                }
             }
 
             demoLogin() {
-                this.currentUser = {
-                    id: 'demo_user',
-                    name: 'Demo User',
-                    email: 'demo@npi-platform.com',
-                    createdAt: new Date().toISOString()
-                };
-
-                localStorage.setItem('npi_user', JSON.stringify(this.currentUser));
-                this.isAuthenticated = true;
-                this.showScreen('dashboard-screen');
-                this.updateNavigation();
+                // Auto-fill demo credentials
+                document.getElementById('login-email').value = 'demo@npi.com';
+                document.getElementById('login-password').value = 'demo123';
+                this.login();
             }
 
             logout() {
-                localStorage.removeItem('npi_user');
+                auth.logout();
                 this.currentUser = null;
-                this.isAuthenticated = false;
                 this.showScreen('landing-screen');
                 this.updateNavigation();
+                this.showSuccess('login-success', 'Signed out successfully');
             }
 
             launchProfiler() {
-                if (!this.isAuthenticated) {
+                if (!this.currentUser) {
                     this.showScreen('login-screen');
                     return;
                 }
@@ -910,7 +914,7 @@
             }
 
             launchAvatarCreator() {
-                if (!this.isAuthenticated) {
+                if (!this.currentUser) {
                     this.showScreen('login-screen');
                     return;
                 }
@@ -918,7 +922,7 @@
             }
 
             launchLibrary() {
-                if (!this.isAuthenticated) {
+                if (!this.currentUser) {
                     this.showScreen('login-screen');
                     return;
                 }
@@ -931,6 +935,13 @@
                 element.classList.add('show');
             }
 
+            showSuccess(elementId, message) {
+                const element = document.getElementById(elementId);
+                element.textContent = message;
+                element.classList.add('show');
+                setTimeout(() => element.classList.remove('show'), 3000);
+            }
+
             clearErrors(prefix) {
                 document.querySelectorAll(`[id^="${prefix}"]`).forEach(element => {
                     if (element.classList.contains('form-error')) {
@@ -940,11 +951,11 @@
             }
 
             showLoading(show) {
-                // Global loading indicator could be added here
-            }
-
-            delay(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
+                // Could implement a proper loading indicator
+                const buttons = document.querySelectorAll('.btn');
+                buttons.forEach(btn => {
+                    btn.disabled = show;
+                });
             }
         }
 
@@ -952,11 +963,6 @@
         console.log('🌐 Initializing NPI Platform...');
         window.app = new NPIPlatform();
         console.log('✅ NPI Platform ready!');
-
-        // Handle navigation back/forward
-        window.addEventListener('popstate', (event) => {
-            // Could implement proper routing here
-        });
     </script>
 </body>
 </html>
