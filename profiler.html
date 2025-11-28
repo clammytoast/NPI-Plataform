@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NPI Profiler - Create Your Digital Mind</title>
+    <title>Neura Profiler - Create Your Digital Mind</title>
+    <script src="auth.js"></script>
     <style>
         * {
             margin: 0;
@@ -13,7 +14,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
             min-height: 100vh;
             color: #333;
             padding: 20px;
@@ -70,12 +71,12 @@
         }
 
         .btn-primary {
-            background: #4a5568;
+            background: #7c3aed;
             color: white;
         }
 
         .btn-primary:hover {
-            background: #2d3748;
+            background: #6d28d9;
             transform: translateY(-2px);
         }
 
@@ -107,7 +108,7 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #4a5568, #2d3748);
+            background: linear-gradient(90deg, #7c3aed, #3b82f6);
             width: 0%;
             transition: width 0.5s ease;
             border-radius: 4px;
@@ -143,7 +144,7 @@
             padding: 1.5rem;
             background: #f8f9fa;
             border-radius: 8px;
-            border-left: 4px solid #4a5568;
+            border-left: 4px solid #7c3aed;
         }
 
         .question-text {
@@ -177,8 +178,8 @@
 
         .text-response:focus {
             outline: none;
-            border-color: #4a5568;
-            box-shadow: 0 0 0 3px rgba(74, 85, 104, 0.1);
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
         }
 
         .response-meta {
@@ -225,7 +226,7 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #4a5568;
+            background: #7c3aed;
             cursor: pointer;
             border: 2px solid white;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
@@ -239,7 +240,7 @@
         .current-value {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #4a5568;
+            color: #7c3aed;
         }
 
         .value-label {
@@ -283,7 +284,7 @@
             padding: 1rem;
             background: #f7fafc;
             border-radius: 8px;
-            border-left: 4px solid #4a5568;
+            border-left: 4px solid #7c3aed;
             opacity: 0.7;
             transition: all 0.3s ease;
         }
@@ -349,7 +350,7 @@
         .stat-card .stat-number {
             font-size: 2rem;
             font-weight: bold;
-            color: #4a5568;
+            color: #7c3aed;
             margin-bottom: 0.5rem;
         }
 
@@ -376,6 +377,26 @@
             gap: 1rem;
             justify-content: center;
             margin-top: 2rem;
+        }
+
+        .auth-status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .auth-status.signed-in {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .auth-status.signed-out {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
         }
 
         @media (max-width: 768px) {
@@ -418,16 +439,18 @@
         <!-- Welcome Screen -->
         <div id="welcome-screen" class="screen active">
             <div class="container">
-                <h1>NPI Profiler</h1>
-                <p class="subtitle">Create Your Nurture Profile Intelligence</p>
+                <h1>Neura Profiler</h1>
+                <p class="subtitle">Create Your Neura Profile Intelligence</p>
+                
+                <div id="auth-status-container">
+                    <!-- Auth status will be populated here -->
+                </div>
+                
                 <div class="welcome-content">
                     <p>This guided process will help build a digital brain based on your life experiences, personality, and values.</p>
                     <p><strong>Time required:</strong> 30-45 minutes</p>
-                    <p><strong>Questions:</strong> 39 comprehensive questions about your life and personality</p>
+                    <p><strong>Questions:</strong> 47 comprehensive questions about your life and personality</p>
                     <button id="start-btn" class="btn-primary" onclick="window.startQuestionnaire()">Begin Creation</button>
-                    <div style="margin-top: 1rem;">
-                        <button class="btn-secondary" onclick="testButton()">Test Button</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -470,7 +493,7 @@
         <!-- Analysis Screen -->
         <div id="analysis-screen" class="screen">
             <div class="container">
-                <h2>Building Your NPI Brain</h2>
+                <h2>Building Your Neura Profile</h2>
                 <div id="analysis-progress">
                     <div class="analysis-step">
                         <span class="step-icon">🧠</span>
@@ -494,22 +517,22 @@
         <!-- Export Screen -->
         <div id="export-screen" class="screen">
             <div class="container">
-                <h2>Your NPI Brain is Ready!</h2>
+                <h2>Your Neura Profile is Ready!</h2>
                 <div class="npi-summary">
                     <div id="npi-stats"></div>
                     <div id="brain-visualization"></div>
                 </div>
                 <div class="export-options">
-                    <button id="export-btn" class="btn-primary" onclick="app.exportNPIBrain()">Download .npibrain File</button>
+                    <button id="export-btn" class="btn-primary" onclick="app.exportNeuraProfile()">Download .neura File</button>
                     <button id="avatar-btn" class="btn-secondary" onclick="app.showAvatarMessage()">Continue to Avatar Creator</button>
-                    <button id="library-btn" class="btn-secondary" onclick="app.saveToLibrary()">Save to NPI Library</button>
+                    <button id="library-btn" class="btn-secondary" onclick="app.saveToLibrary()">Save to Neura Library</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // === COMPLETE 47-QUESTION NPI PROFILER ===
+        // === COMPLETE 47-QUESTION NEURA PROFILER ===
         class CompleteQuestionnaire {
             constructor() {
                 this.currentSection = 0;
@@ -694,13 +717,37 @@
             }
         }
 
-        // === COMPLETE NPI APPLICATION ===
-        class CompleteNPIApp {
+        // === COMPLETE NEURA APPLICATION ===
+        class CompleteNeuraApp {
             constructor() {
-                console.log('🚀 Complete NPI Profiler starting...');
+                console.log('🚀 Neura Profiler starting...');
+                this.checkAuthentication();
                 this.questionnaire = new CompleteQuestionnaire();
-                this.npiBrain = null;
+                this.neuraProfile = null;
                 console.log('✅ App ready with', this.questionnaire.getTotalQuestions(), 'questions across', this.questionnaire.sections.length, 'sections');
+            }
+
+            checkAuthentication() {
+                const user = auth.getCurrentUser();
+                const authContainer = document.getElementById('auth-status-container');
+                const startBtn = document.getElementById('start-btn');
+
+                if (user) {
+                    authContainer.innerHTML = `
+                        <div class="auth-status signed-in">
+                            ✅ Signed in as ${user.name} (${user.email})
+                        </div>
+                    `;
+                    startBtn.disabled = false;
+                } else {
+                    authContainer.innerHTML = `
+                        <div class="auth-status signed-out">
+                            ⚠️ You are not signed in. Your profile will not be saved to your library.
+                            <br><small><a href="index.html" style="color: #92400e; text-decoration: underline;">Sign in to Neura</a> to save your profile</small>
+                        </div>
+                    `;
+                    startBtn.disabled = false;
+                }
             }
 
             startQuestionnaire() {
@@ -869,7 +916,7 @@
                     "Building neural network...",
                     "Creating moral framework...",
                     "Configuring emotional system...",
-                    "Finalizing NPI profile..."
+                    "Finalizing Neura profile..."
                 ];
 
                 for (let step of steps) {
@@ -877,7 +924,7 @@
                     await this.delay(800);
                 }
 
-                await this.generateCompleteNPIBrain();
+                await this.generateCompleteNeuraProfile();
                 this.showScreen('export-screen');
                 this.renderCompleteSummary();
             }
@@ -925,7 +972,7 @@
                 }
                 
                 // Draw nodes
-                ctx.fillStyle = '#4a5568';
+                ctx.fillStyle = '#7c3aed';
                 for (let i = 0; i < Math.min(nodes, 20); i++) {
                     ctx.beginPath();
                     ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 4 + (Math.random() * 4), 0, 2 * Math.PI);
@@ -933,17 +980,17 @@
                 }
             }
 
-            async generateCompleteNPIBrain() {
+            async generateCompleteNeuraProfile() {
                 const responses = this.questionnaire.getAllResponses();
                 const responseCount = Object.keys(responses).length;
                 
-                this.npiBrain = {
-                    npi_spec_version: "1.0",
+                this.neuraProfile = {
+                    neura_spec_version: "1.0",
                     metadata: {
-                        name: `My NPI - ${new Date().toLocaleDateString()}`,
-                        creator: "npi_profiler",
+                        name: `My Neura Profile - ${new Date().toLocaleDateString()}`,
+                        creator: "neura_profiler",
                         created_date: new Date().toISOString(),
-                        npi_type: "nurture_based",
+                        profile_type: "nurture_based",
                         questions_answered: responseCount
                     },
                     brain_architecture: {
@@ -1009,8 +1056,8 @@
             renderCompleteSummary() {
                 const statsContainer = document.getElementById('npi-stats');
                 
-                if (!this.npiBrain) {
-                    statsContainer.innerHTML = '<p>Error generating NPI brain.</p>';
+                if (!this.neuraProfile) {
+                    statsContainer.innerHTML = '<p>Error generating Neura profile.</p>';
                     return;
                 }
 
@@ -1019,24 +1066,24 @@
 
                 statsContainer.innerHTML = `
                     <div class="stat-item">
-                        <h3>${this.npiBrain.metadata.name}</h3>
+                        <h3>${this.neuraProfile.metadata.name}</h3>
                         <div class="stat-grid">
                             <div class="stat-card">
                                 <div class="stat-number">${responses}</div>
                                 <div class="stat-label">Questions Answered</div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-number">${this.npiBrain.brain_architecture.neural_network.nodes}</div>
+                                <div class="stat-number">${this.neuraProfile.brain_architecture.neural_network.nodes}</div>
                                 <div class="stat-label">Neural Nodes</div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-number">${this.npiBrain.brain_architecture.moral_framework.principles.length}</div>
+                                <div class="stat-number">${this.neuraProfile.brain_architecture.moral_framework.principles.length}</div>
                                 <div class="stat-label">Core Principles</div>
                             </div>
                         </div>
                         <div class="npi-details">
-                            <p><strong>Reasoning Style:</strong> ${this.npiBrain.brain_architecture.reasoning_system.default_style.replace(/_/g, ' ')}</p>
-                            <p><strong>Base Mood:</strong> ${this.npiBrain.brain_architecture.emotional_system.base_mood.replace(/_/g, ' ')}</p>
+                            <p><strong>Reasoning Style:</strong> ${this.neuraProfile.brain_architecture.reasoning_system.default_style.replace(/_/g, ' ')}</p>
+                            <p><strong>Base Mood:</strong> ${this.neuraProfile.brain_architecture.emotional_system.base_mood.replace(/_/g, ' ')}</p>
                             <p><strong>Progress:</strong> ${responses}/${totalQuestions} questions completed</p>
                             <p><strong>Created:</strong> ${new Date().toLocaleDateString()}</p>
                         </div>
@@ -1044,48 +1091,67 @@
                 `;
             }
 
-            // === UPDATED: Save to library when exporting ===
-            exportNPIBrain() {
-                if (!this.npiBrain) {
+            // === ENHANCED: Save to user library ===
+            saveToLibrary() {
+                if (!this.neuraProfile) {
                     alert('Please complete the questionnaire first.');
                     return;
                 }
 
-                const blob = new Blob([JSON.stringify(this.npiBrain, null, 2)], { type: 'application/json' });
+                if (!auth.isAuthenticated()) {
+                    const proceed = confirm('You are not signed in. Your Neura Profile will not be saved to your library.\n\nWould you like to sign in now?');
+                    if (proceed) {
+                        window.open('index.html', '_blank');
+                    }
+                    return;
+                }
+
+                const userLibrary = auth.getUserLibrary();
+                const profileRecord = {
+                    id: 'neura_' + Date.now(),
+                    name: this.neuraProfile.metadata.name,
+                    type: this.neuraProfile.metadata.profile_type,
+                    created: new Date().toISOString(),
+                    data: this.neuraProfile,
+                    owner: auth.getCurrentUser().id
+                };
+                
+                userLibrary.unshift(profileRecord);
+                auth.saveUserLibrary(userLibrary);
+                
+                alert('✅ Your Neura Profile has been saved to your personal library!\n\nYou can now access it from the Neura Library to create avatars or make changes.');
+            }
+
+            // === ENHANCED: Export with user context ===
+            exportNeuraProfile() {
+                if (!this.neuraProfile) {
+                    alert('Please complete the questionnaire first.');
+                    return;
+                }
+
+                const blob = new Blob([JSON.stringify(this.neuraProfile, null, 2)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = `my_npi_brain_${Date.now()}.npibrain`;
+                link.download = `neura_profile_${Date.now()}.neura`;
                 link.click();
                 URL.revokeObjectURL(url);
                 
-                // === ADDED: Save to library ===
-                this.saveToLibrary();
-                
-                alert('✅ Your NPI brain has been exported and saved to your library!\n\nYou can now import this .npibrain file into the Avatar Creator or find it in your NPI Library.');
-            }
-
-            // === ADDED: New method to save to library ===
-            saveToLibrary() {
-                if (!this.npiBrain) {
-                    alert('Please complete the questionnaire first.');
-                    return;
+                if (auth.isAuthenticated()) {
+                    this.saveToLibrary();
+                    alert('✅ Your Neura Profile has been exported and saved to your personal library!');
+                } else {
+                    alert('✅ Your Neura Profile has been exported!\n\nSign in to save it to your personal library.');
                 }
-
-                // Save to library storage
-                localStorage.setItem('new_npi_created', JSON.stringify(this.npiBrain));
-                
-                alert('✅ Your NPI brain has been saved to your library!\n\nYou can now access it from the NPI Library to create avatars or make changes.');
             }
 
-            // === UPDATED: Save to library before showing avatar message ===
+            // === ENHANCED: Save to library before showing avatar message ===
             showAvatarMessage() {
-                // Save to library before redirecting
-                if (this.npiBrain) {
-                    localStorage.setItem('new_npi_created', JSON.stringify(this.npiBrain));
+                if (auth.isAuthenticated() && this.neuraProfile) {
+                    this.saveToLibrary();
                 }
                 
-                alert('🎭 Avatar Creator - Ready!\n\nYour NPI brain has been saved to your library. You can now:\n\n1. Open the Avatar Creator\n2. Click "Load from NPI Library"\n3. Select your NPI to create an avatar!');
+                alert('🎭 Avatar Creator - Ready!\n\nYour Neura Profile has been saved. You can now:\n\n1. Open the Avatar Creator\n2. Click "Load from Neura Library"\n3. Select your profile to create an avatar!');
             }
 
             delay(ms) {
@@ -1094,24 +1160,19 @@
         }
 
         // === GLOBAL FUNCTIONS ===
-        function testButton() {
-            alert('✅ Test successful! The NPI Profiler is working correctly.');
-            console.log('✅ Test button clicked - all systems operational');
-        }
-
         window.startQuestionnaire = function() {
-            console.log('🌐 Starting complete NPI questionnaire...');
+            console.log('🌐 Starting complete Neura questionnaire...');
             if (!window.app) {
-                window.app = new CompleteNPIApp();
+                window.app = new CompleteNeuraApp();
             }
             window.app.startQuestionnaire();
         };
 
         // === INITIALIZATION ===
-        console.log('🚀 NPI Profiler v1.0 - Complete 47-Question Version');
+        console.log('🚀 Neura Profiler v1.0 - Complete 47-Question Version');
         console.log('📝 Initializing application...');
-        window.app = new CompleteNPIApp();
-        console.log('🎉 NPI Profiler ready! Click "Begin Creation" to start.');
+        window.app = new CompleteNeuraApp();
+        console.log('🎉 Neura Profiler ready! Click "Begin Creation" to start.');
     </script>
 </body>
 </html>
