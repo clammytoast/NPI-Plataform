@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPI Platform - Create Your Digital Mind</title>
+    <style>
+        /* === GLOBAL STYLES === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4a5568;
+            --primary-dark: #2d3748;
+            --secondary: #718096;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --accent: #667eea;
+            --success: #48bb78;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--white);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* === HEADER & NAVIGATION === */
+        .header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* === BUTTON STYLES === */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        .btn-accent:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        /* === LANDING PAGE STYLES === */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--white);
+            padding: 120px 0 80px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .features {
+            padding: 80px 0;
+            background: var(--light);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .feature-card p {
+            color: var(--secondary);
+            line-height: 1.6;
+        }
+
+        .how-it-works {
+            padding: 80px 0;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1.5rem;
+        }
+
+        .cta-section {
+            background: var(--primary);
+            color: var(--white);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* === AUTH STYLES === */
+        .auth-container {
+            max-width: 400px;
+            margin: 100px auto 2rem;
+            padding: 2rem;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .form-input {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-error {
+            color: #e53e3e;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .form-error.show {
+            display: block;
+        }
+
+        /* === DASHBOARD STYLES === */
+        .dashboard {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        .dashboard-header {
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .dashboard-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .card-description {
+            color: var(--secondary);
+            line-height: 1.6;
+        }
+
+        /* === TOOLS STYLES === */
+        .tool-container {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        .tool-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .tool-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .tool-header p {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* === RESPONSIVE DESIGN === */
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .features-grid,
+            .steps,
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        /* === UTILITY CLASSES === */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-2 { margin-top: 2rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .my-2 { margin: 2rem 0; }
+
+        .hidden {
+            display: none;
+        }
+
+        /* === LOADING STATES === */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="header">
+        <nav class="nav">
+            <a href="#" class="logo" onclick="app.showScreen('landing-screen')">NPI Platform</a>
+            <div class="nav-links">
+                <a href="#" class="nav-link" onclick="app.showScreen('landing-screen')">Home</a>
+                <a href="#" class="nav-link" onclick="app.showScreen('about-screen')">About</a>
+                <a href="#" class="nav-link" onclick="app.showScreen('tools-screen')">Tools</a>
+                <div class="nav-actions" id="nav-actions">
+                    <!-- Auth buttons will be populated here -->
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Landing Screen -->
+    <div id="landing-screen" class="screen active">
+        <section class="hero">
+            <div class="container">
+                <h1>Create Your Digital Mind</h1>
+                <p>Nurture Profile Intelligence (NPI) - Build AI personalities based on your unique experiences, values, and reasoning patterns.</p>
+                <div class="hero-actions">
+                    <button class="btn btn-accent" onclick="app.showScreen('register-screen')">Start Free</button>
+                    <button class="btn btn-secondary" onclick="app.showScreen('about-screen')">Learn More</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Why Create a Digital Mind?</h2>
+                    <p>NPI technology allows you to build AI companions that truly understand your perspective and values.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🧠</div>
+                        <h3>Personalized AI</h3>
+                        <p>Create AI that thinks like you, understands your values, and respects your unique perspective.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👤</div>
+                        <h3>Digital Avatars</h3>
+                        <p>Bring your NPI to life with customizable 3D avatars using Ready Player Me integration.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3>Complete Privacy</h3>
+                        <p>Your NPI data stays private and secure. You control who has access to your digital mind.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="how-it-works">
+            <div class="container">
+                <div class="section-title">
+                    <h2>How It Works</h2>
+                    <p>Create your digital mind in three simple steps</p>
+                </div>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Build Your Profile</h3>
+                        <p>Complete our guided questionnaire to map your personality, values, and reasoning patterns.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Create Your NPI</h3>
+                        <p>Generate your unique Nurture Profile Intelligence based on your responses.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Bring to Life</h3>
+                        <p>Create a 3D avatar and configure it with your NPI's personality traits.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <h2>Ready to Create Your Digital Mind?</h2>
+                <p>Join thousands of users who have already created their NPIs.</p>
+                <button class="btn btn-accent" onclick="app.showScreen('register-screen')">Get Started Free</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- About Screen -->
+    <div id="about-screen" class="screen">
+        <div class="container" style="margin-top: 100px; padding: 2rem 0;">
+            <div class="tool-header">
+                <h1>About NPI Technology</h1>
+                <p>Understanding Nurture Profile Intelligence and its applications</p>
+            </div>
+            
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h2>What is NPI?</h2>
+                <p style="margin-bottom: 2rem;">Nurture Profile Intelligence (NPI) is a revolutionary approach to AI personality creation that focuses on modeling human-like reasoning based on lived experiences, values, and developmental patterns.</p>
+
+                <h2>Key Features</h2>
+                <div style="margin: 2rem 0;">
+                    <h3>🧠 Experience-Based Reasoning</h3>
+                    <p>NPIs reason from foundational memories and experiences, not just abstract rules.</p>
+                    
+                    <h3>💡 Moral Compass Integration</h3>
+                    <p>Each NPI develops its own ethical framework based on the user's values and principles.</p>
+                    
+                    <h3>🎭 Personality Consistency</h3>
+                    <p>Maintains consistent personality traits across different contexts and interactions.</p>
+                    
+                    <h3>🚀 Growth-Oriented</h3>
+                    <p>NPIs can learn and evolve while maintaining core identity principles.</p>
+                </div>
+
+                <h2>Use Cases</h2>
+                <ul style="margin: 2rem 0 2rem 2rem;">
+                    <li>Personal AI assistants that truly understand you</li>
+                    <li>Digital legacy and memory preservation</li>
+                    <li>Educational companions with personalized teaching styles</li>
+                    <li>Therapeutic tools for self-reflection and growth</li>
+                    <li>Creative collaboration with AI that shares your aesthetic</li>
+                </ul>
+
+                <div class="text-center mt-2">
+                    <button class="btn btn-primary" onclick="app.showScreen('tools-screen')">Explore Tools</button>
+                    <button class="btn btn-secondary" onclick="app.showScreen('landing-screen')">Back to Home</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tools Screen -->
+    <div id="tools-screen" class="screen">
+        <div class="container" style="margin-top: 100px; padding: 2rem 0;">
+            <div class="tool-header">
+                <h1>NPI Creation Tools</h1>
+                <p>Everything you need to build and manage your digital minds</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card" onclick="app.launchProfiler()">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title">NPI Profiler</div>
+                    <div class="card-description">Complete the comprehensive questionnaire to build your NPI foundation. Map your personality, values, and reasoning patterns.</div>
+                </div>
+                
+                <div class="dashboard-card" onclick="app.launchAvatarCreator()">
+                    <div class="card-icon">👤</div>
+                    <div class="card-title">Avatar Creator</div>
+                    <div class="card-description">Bring your NPIs to life with Ready Player Me. Create 3D avatars configured with your NPI's personality traits.</div>
+                </div>
+                
+                <div class="dashboard-card" onclick="app.launchLibrary()">
+                    <div class="card-icon">📚</div>
+                    <div class="card-title">NPI Library</div>
+                    <div class="card-description">Manage your digital minds, create new NPIs, and organize your personality profiles in your personal library.</div>
+                </div>
+                
+                <div class="dashboard-card" onclick="app.showScreen('about-screen')">
+                    <div class="card-icon">📖</div>
+                    <div class="card-title">Documentation</div>
+                    <div class="card-description">Learn about NPI technology, best practices, and advanced features for creating sophisticated digital minds.</div>
+                </div>
+            </div>
+
+            <div class="text-center mt-2">
+                <button class="btn btn-secondary" onclick="app.showScreen('landing-screen')">Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen">
+        <div class="container auth-container">
+            <h1 class="text-center">Welcome Back</h1>
+            <p class="text-center" style="color: var(--secondary); margin-bottom: 2rem;">Sign in to your NPI account</p>
+            
+            <div class="auth-form">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="login-email" class="form-input" placeholder="your@email.com">
+                    <div class="form-error" id="login-email-error"></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="login-password" class="form-input" placeholder="Your password">
+                    <div class="form-error" id="login-password-error"></div>
+                </div>
+                <button class="btn btn-primary" onclick="app.login()">Sign In</button>
+                <button class="btn btn-secondary" onclick="app.showScreen('register-screen')">Create Account</button>
+                <div class="text-center" style="margin-top: 1rem;">
+                    <button class="btn btn-secondary" onclick="app.demoLogin()">Try Demo Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Screen -->
+    <div id="register-screen" class="screen">
+        <div class="container auth-container">
+            <h1 class="text-center">Create Account</h1>
+            <p class="text-center" style="color: var(--secondary); margin-bottom: 2rem;">Join the NPI community</p>
+            
+            <div class="auth-form">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="register-name" class="form-input" placeholder="Your full name">
+                    <div class="form-error" id="register-name-error"></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="register-email" class="form-input" placeholder="your@email.com">
+                    <div class="form-error" id="register-email-error"></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="register-password" class="form-input" placeholder="Minimum 8 characters">
+                    <div class="form-error" id="register-password-error"></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" id="register-confirm" class="form-input" placeholder="Confirm your password">
+                    <div class="form-error" id="register-confirm-error"></div>
+                </div>
+                <button class="btn btn-primary" onclick="app.register()">Create Account</button>
+                <button class="btn btn-secondary" onclick="app.showScreen('login-screen')">Back to Sign In</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboard-screen" class="screen">
+        <div class="container dashboard">
+            <div class="dashboard-header">
+                <h1>Welcome, <span id="user-name">User</span>!</h1>
+                <p>Your NPI Digital Mind Ecosystem</p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card" onclick="app.launchProfiler()">
+                    <div class="card-icon">🧠</div>
+                    <div class="card-title">Create New NPI</div>
+                    <div class="card-description">Build a new digital mind using our comprehensive profiler questionnaire.</div>
+                </div>
+                
+                <div class="dashboard-card" onclick="app.launchAvatarCreator()">
+                    <div class="card-icon">👤</div>
+                    <div class="card-title">Avatar Studio</div>
+                    <div class="card-description">Create and customize 3D avatars for your existing NPIs.</div>
+                </div>
+                
+                <div class="dashboard-card" onclick="app.launchLibrary()">
+                    <div class="card-icon">📚</div>
+                    <div class="card-title">My NPI Library</div>
+                    <div class="card-description">Manage your digital minds and view their profiles.</div>
+                </div>
+                
+                <div class="dashboard-card" onclick="app.showScreen('tools-screen')">
+                    <div class="card-icon">⚙️</div>
+                    <div class="card-title">Tools & Resources</div>
+                    <div class="card-description">Access all NPI creation tools and learning resources.</div>
+                </div>
+            </div>
+
+            <div class="text-center mt-2">
+                <button class="btn btn-secondary" onclick="app.logout()">Sign Out</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === COMPLETE NPI PLATFORM ===
+        class NPIPlatform {
+            constructor() {
+                this.currentUser = null;
+                this.isAuthenticated = false;
+                this.initializeApp();
+            }
+
+            initializeApp() {
+                this.checkAuthState();
+                this.updateNavigation();
+                console.log('🚀 NPI Platform initialized');
+            }
+
+            checkAuthState() {
+                const user = localStorage.getItem('npi_user');
+                if (user) {
+                    this.currentUser = JSON.parse(user);
+                    this.isAuthenticated = true;
+                    this.showScreen('dashboard-screen');
+                }
+            }
+
+            updateNavigation() {
+                const navActions = document.getElementById('nav-actions');
+                
+                if (this.isAuthenticated) {
+                    navActions.innerHTML = `
+                        <span style="color: var(--primary);">Hi, ${this.currentUser?.name}</span>
+                        <button class="btn btn-secondary" onclick="app.showScreen('dashboard-screen')">Dashboard</button>
+                        <button class="btn btn-primary" onclick="app.logout()">Sign Out</button>
+                    `;
+                    
+                    if (document.getElementById('user-name')) {
+                        document.getElementById('user-name').textContent = this.currentUser.name;
+                    }
+                } else {
+                    navActions.innerHTML = `
+                        <button class="btn btn-secondary" onclick="app.showScreen('login-screen')">Sign In</button>
+                        <button class="btn btn-primary" onclick="app.showScreen('register-screen')">Sign Up</button>
+                    `;
+                }
+            }
+
+            showScreen(screenId) {
+                // Don't show dashboard to non-authenticated users
+                if (screenId === 'dashboard-screen' && !this.isAuthenticated) {
+                    this.showScreen('login-screen');
+                    return;
+                }
+
+                document.querySelectorAll('.screen').forEach(screen => {
+                    screen.classList.remove('active');
+                });
+                document.getElementById(screenId).classList.add('active');
+                
+                // Scroll to top when changing screens
+                window.scrollTo(0, 0);
+            }
+
+            async login() {
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                this.clearErrors('login');
+                
+                if (!email) {
+                    this.showError('login-email-error', 'Email is required');
+                    return;
+                }
+                if (!password) {
+                    this.showError('login-password-error', 'Password is required');
+                    return;
+                }
+
+                // Simulate API call
+                this.showLoading(true);
+                await this.delay(1000);
+
+                this.currentUser = {
+                    id: 'user_' + Date.now(),
+                    name: email.split('@')[0],
+                    email: email,
+                    createdAt: new Date().toISOString()
+                };
+
+                localStorage.setItem('npi_user', JSON.stringify(this.currentUser));
+                this.isAuthenticated = true;
+                this.showScreen('dashboard-screen');
+                this.updateNavigation();
+                this.showLoading(false);
+            }
+
+            async register() {
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const confirm = document.getElementById('register-confirm').value;
+                
+                this.clearErrors('register');
+                
+                if (!name) {
+                    this.showError('register-name-error', 'Name is required');
+                    return;
+                }
+                if (!email) {
+                    this.showError('register-email-error', 'Email is required');
+                    return;
+                }
+                if (!password) {
+                    this.showError('register-password-error', 'Password is required');
+                    return;
+                }
+                if (password.length < 8) {
+                    this.showError('register-password-error', 'Password must be at least 8 characters');
+                    return;
+                }
+                if (password !== confirm) {
+                    this.showError('register-confirm-error', 'Passwords do not match');
+                    return;
+                }
+
+                this.showLoading(true);
+                await this.delay(1000);
+
+                this.currentUser = {
+                    id: 'user_' + Date.now(),
+                    name: name,
+                    email: email,
+                    createdAt: new Date().toISOString()
+                };
+
+                localStorage.setItem('npi_user', JSON.stringify(this.currentUser));
+                this.isAuthenticated = true;
+                this.showScreen('dashboard-screen');
+                this.updateNavigation();
+                this.showLoading(false);
+            }
+
+            demoLogin() {
+                this.currentUser = {
+                    id: 'demo_user',
+                    name: 'Demo User',
+                    email: 'demo@npi-platform.com',
+                    createdAt: new Date().toISOString()
+                };
+
+                localStorage.setItem('npi_user', JSON.stringify(this.currentUser));
+                this.isAuthenticated = true;
+                this.showScreen('dashboard-screen');
+                this.updateNavigation();
+            }
+
+            logout() {
+                localStorage.removeItem('npi_user');
+                this.currentUser = null;
+                this.isAuthenticated = false;
+                this.showScreen('landing-screen');
+                this.updateNavigation();
+            }
+
+            launchProfiler() {
+                if (!this.isAuthenticated) {
+                    this.showScreen('login-screen');
+                    return;
+                }
+                alert('🚀 Launching NPI Profiler...\n\nThis would open the full NPI questionnaire interface in a new tab or embedded view.');
+                // window.open('npi-profiler.html', '_blank');
+            }
+
+            launchAvatarCreator() {
+                if (!this.isAuthenticated) {
+                    this.showScreen('login-screen');
+                    return;
+                }
+                alert('🎭 Launching Avatar Creator...\n\nThis would open the Ready Player Me integration with your NPI library.');
+                // window.open('avatar-creator.html', '_blank');
+            }
+
+            launchLibrary() {
+                if (!this.isAuthenticated) {
+                    this.showScreen('login-screen');
+                    return;
+                }
+                alert('📚 Opening NPI Library...\n\nThis would show your personal collection of digital minds with management tools.');
+            }
+
+            showError(elementId, message) {
+                const element = document.getElementById(elementId);
+                element.textContent = message;
+                element.classList.add('show');
+            }
+
+            clearErrors(prefix) {
+                document.querySelectorAll(`[id^="${prefix}"]`).forEach(element => {
+                    if (element.classList.contains('form-error')) {
+                        element.classList.remove('show');
+                    }
+                });
+            }
+
+            showLoading(show) {
+                // Global loading indicator could be added here
+            }
+
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // === INITIALIZATION ===
+        console.log('🌐 Initializing NPI Platform...');
+        window.app = new NPIPlatform();
+        console.log('✅ NPI Platform ready!');
+
+        // Handle navigation back/forward
+        window.addEventListener('popstate', (event) => {
+            // Could implement proper routing here
+        });
+    </script>
+</body>
+</html>
