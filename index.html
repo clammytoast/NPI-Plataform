@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NPI Platform - Create Your Digital Mind</title>
+    <title>Neura - Create Your Digital Mind</title>
     <script src="auth.js"></script>
     <style>
-        /* === GLOBAL STYLES === */
         * {
             margin: 0;
             padding: 0;
@@ -20,6 +19,8 @@
             --light: #f7fafc;
             --white: #ffffff;
             --accent: #667eea;
+            --neura-purple: #7c3aed;
+            --neura-blue: #3b82f6;
             --success: #48bb78;
             --error: #e53e3e;
         }
@@ -45,7 +46,6 @@
             padding: 0 2rem;
         }
 
-        /* === HEADER & NAVIGATION === */
         .header {
             background: var(--white);
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -65,7 +65,7 @@
         .logo {
             font-size: 1.5rem;
             font-weight: bold;
-            color: var(--primary);
+            color: var(--neura-purple);
             text-decoration: none;
         }
 
@@ -83,7 +83,7 @@
         }
 
         .nav-link:hover {
-            color: var(--accent);
+            color: var(--neura-purple);
         }
 
         .nav-actions {
@@ -92,7 +92,6 @@
             align-items: center;
         }
 
-        /* === BUTTON STYLES === */
         .btn {
             padding: 12px 24px;
             border: none;
@@ -107,12 +106,12 @@
         }
 
         .btn-primary {
-            background: var(--primary);
+            background: var(--neura-purple);
             color: var(--white);
         }
 
         .btn-primary:hover {
-            background: var(--primary-dark);
+            background: var(--neura-blue);
             transform: translateY(-2px);
         }
 
@@ -128,18 +127,17 @@
         }
 
         .btn-accent {
-            background: var(--accent);
+            background: var(--neura-blue);
             color: var(--white);
         }
 
         .btn-accent:hover {
-            background: #5a6fd8;
+            background: #2563eb;
             transform: translateY(-2px);
         }
 
-        /* === LANDING PAGE STYLES === */
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--neura-purple) 0%, var(--neura-blue) 100%);
             color: var(--white);
             padding: 120px 0 80px;
             text-align: center;
@@ -245,7 +243,7 @@
         .step-number {
             width: 60px;
             height: 60px;
-            background: var(--accent);
+            background: var(--neura-purple);
             color: var(--white);
             border-radius: 50%;
             display: flex;
@@ -274,7 +272,6 @@
             opacity: 0.9;
         }
 
-        /* === AUTH STYLES === */
         .auth-container {
             max-width: 400px;
             margin: 100px auto 2rem;
@@ -308,7 +305,7 @@
 
         .form-input:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: var(--neura-purple);
         }
 
         .form-error {
@@ -335,7 +332,6 @@
             display: block;
         }
 
-        /* === DASHBOARD STYLES === */
         .dashboard {
             margin-top: 80px;
             padding: 2rem 0;
@@ -356,7 +352,7 @@
             background: var(--white);
             padding: 2.5rem;
             border-radius: 12px;
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--neura-purple);
             transition: all 0.3s ease;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -383,7 +379,6 @@
             line-height: 1.6;
         }
 
-        /* === TOOLS STYLES === */
         .tool-container {
             margin-top: 80px;
             padding: 2rem 0;
@@ -407,7 +402,6 @@
             margin: 0 auto;
         }
 
-        /* === RESPONSIVE DESIGN === */
         @media (max-width: 768px) {
             .nav {
                 flex-direction: column;
@@ -443,7 +437,6 @@
             }
         }
 
-        /* === UTILITY CLASSES === */
         .text-center {
             text-align: center;
         }
@@ -456,7 +449,6 @@
             display: none;
         }
 
-        /* === LOADING STATES === */
         .loading {
             display: none;
             text-align: center;
@@ -469,7 +461,7 @@
 
         .spinner {
             border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary);
+            border-top: 4px solid var(--neura-purple);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -484,10 +476,9 @@
     </style>
 </head>
 <body>
-    <!-- Header Navigation -->
     <header class="header">
         <nav class="nav">
-            <a href="#" class="logo" onclick="app.showScreen('landing-screen')">NPI Platform</a>
+            <a href="#" class="logo" onclick="app.showScreen('landing-screen')">Neura</a>
             <div class="nav-links">
                 <a href="#" class="nav-link" onclick="app.showScreen('landing-screen')">Home</a>
                 <a href="#" class="nav-link" onclick="app.showScreen('about-screen')">About</a>
@@ -504,7 +495,7 @@
         <section class="hero">
             <div class="container">
                 <h1>Create Your Digital Mind</h1>
-                <p>Nurture Profile Intelligence (NPI) - Build AI personalities based on your unique experiences, values, and reasoning patterns.</p>
+                <p>Neura Profile Intelligence (NPI) - Build AI personalities based on your unique experiences, values, and reasoning patterns.</p>
                 <div class="hero-actions">
                     <button class="btn btn-accent" onclick="app.showScreen('register-screen')">Start Free</button>
                     <button class="btn btn-secondary" onclick="app.showScreen('about-screen')">Learn More</button>
@@ -516,7 +507,7 @@
             <div class="container">
                 <div class="section-title">
                     <h2>Why Create a Digital Mind?</h2>
-                    <p>NPI technology allows you to build AI companions that truly understand your perspective and values.</p>
+                    <p>Neura technology allows you to build AI companions that truly understand your perspective and values.</p>
                 </div>
                 <div class="features-grid">
                     <div class="feature-card">
@@ -553,7 +544,7 @@
                     <div class="step">
                         <div class="step-number">2</div>
                         <h3>Create Your NPI</h3>
-                        <p>Generate your unique Nurture Profile Intelligence based on your responses.</p>
+                        <p>Generate your unique Neura Profile Intelligence based on your responses.</p>
                     </div>
                     <div class="step">
                         <div class="step-number">3</div>
@@ -577,13 +568,13 @@
     <div id="about-screen" class="screen">
         <div class="container" style="margin-top: 100px; padding: 2rem 0;">
             <div class="tool-header">
-                <h1>About NPI Technology</h1>
-                <p>Understanding Nurture Profile Intelligence and its applications</p>
+                <h1>About Neura Technology</h1>
+                <p>Understanding Neura Profile Intelligence and its applications</p>
             </div>
             
             <div style="max-width: 800px; margin: 0 auto;">
-                <h2>What is NPI?</h2>
-                <p style="margin-bottom: 2rem;">Nurture Profile Intelligence (NPI) is a revolutionary approach to AI personality creation that focuses on modeling human-like reasoning based on lived experiences, values, and developmental patterns.</p>
+                <h2>What is Neura?</h2>
+                <p style="margin-bottom: 2rem;">Neura Profile Intelligence (NPI) is a revolutionary approach to AI personality creation that focuses on modeling human-like reasoning based on lived experiences, values, and developmental patterns.</p>
 
                 <h2>Key Features</h2>
                 <div style="margin: 2rem 0;">
@@ -621,7 +612,7 @@
     <div id="tools-screen" class="screen">
         <div class="container" style="margin-top: 100px; padding: 2rem 0;">
             <div class="tool-header">
-                <h1>NPI Creation Tools</h1>
+                <h1>Neura Creation Tools</h1>
                 <p>Everything you need to build and manage your digital minds</p>
             </div>
 
@@ -661,7 +652,7 @@
     <div id="login-screen" class="screen">
         <div class="container auth-container">
             <h1 class="text-center">Welcome Back</h1>
-            <p class="text-center" style="color: var(--secondary); margin-bottom: 2rem;">Sign in to your NPI account</p>
+            <p class="text-center" style="color: var(--secondary); margin-bottom: 2rem;">Sign in to your Neura account</p>
             
             <div class="success-message" id="login-success"></div>
             
@@ -689,7 +680,7 @@
     <div id="register-screen" class="screen">
         <div class="container auth-container">
             <h1 class="text-center">Create Account</h1>
-            <p class="text-center" style="color: var(--secondary); margin-bottom: 2rem;">Join the NPI community</p>
+            <p class="text-center" style="color: var(--secondary); margin-bottom: 2rem;">Join the Neura community</p>
             
             <div class="success-message" id="register-success"></div>
             
@@ -725,7 +716,7 @@
         <div class="container dashboard">
             <div class="dashboard-header">
                 <h1>Welcome, <span id="user-name">User</span>!</h1>
-                <p>Your NPI Digital Mind Ecosystem</p>
+                <p>Your Neura Digital Mind Ecosystem</p>
             </div>
             
             <div class="dashboard-grid">
@@ -750,7 +741,7 @@
                 <div class="dashboard-card" onclick="app.showScreen('tools-screen')">
                     <div class="card-icon">⚙️</div>
                     <div class="card-title">Tools & Resources</div>
-                    <div class="card-description">Access all NPI creation tools and learning resources.</div>
+                    <div class="card-description">Access all Neura creation tools and learning resources.</div>
                 </div>
             </div>
 
@@ -761,8 +752,7 @@
     </div>
 
     <script>
-        // === COMPLETE NPI PLATFORM WITH REAL AUTH ===
-        class NPIPlatform {
+        class NeuraPlatform {
             constructor() {
                 this.currentUser = null;
                 this.initializeApp();
@@ -771,7 +761,7 @@
             initializeApp() {
                 this.checkAuthState();
                 this.updateNavigation();
-                console.log('🚀 NPI Platform initialized');
+                console.log('🚀 Neura Platform initialized');
             }
 
             checkAuthState() {
@@ -786,7 +776,9 @@
                 
                 if (this.currentUser) {
                     navActions.innerHTML = `
-                        <span style="color: var(--primary);">Hi, ${this.currentUser.name}</span>
+                        <span style="color: var(--primary); margin-right: 1rem;">
+                            👤 Hi, ${this.currentUser.name}
+                        </span>
                         <button class="btn btn-secondary" onclick="app.showScreen('dashboard-screen')">Dashboard</button>
                         <button class="btn btn-primary" onclick="app.logout()">Sign Out</button>
                     `;
@@ -796,6 +788,7 @@
                     }
                 } else {
                     navActions.innerHTML = `
+                        <span style="color: var(--secondary); margin-right: 1rem;">Guest User</span>
                         <button class="btn btn-secondary" onclick="app.showScreen('login-screen')">Sign In</button>
                         <button class="btn btn-primary" onclick="app.showScreen('register-screen')">Sign Up</button>
                     `;
@@ -803,7 +796,6 @@
             }
 
             showScreen(screenId) {
-                // Don't show dashboard to non-authenticated users
                 if (screenId === 'dashboard-screen' && !this.currentUser) {
                     this.showScreen('login-screen');
                     return;
@@ -813,8 +805,6 @@
                     screen.classList.remove('active');
                 });
                 document.getElementById(screenId).classList.add('active');
-                
-                // Scroll to top when changing screens
                 window.scrollTo(0, 0);
             }
 
@@ -882,7 +872,7 @@
                     this.currentUser = user;
                     this.showScreen('dashboard-screen');
                     this.updateNavigation();
-                    this.showSuccess('register-success', `Welcome to NPI Platform, ${user.name}!`);
+                    this.showSuccess('register-success', `Welcome to Neura, ${user.name}!`);
                 } catch (error) {
                     this.showError('register-email-error', error.message);
                 } finally {
@@ -891,8 +881,7 @@
             }
 
             demoLogin() {
-                // Auto-fill demo credentials
-                document.getElementById('login-email').value = 'demo@npi.com';
+                document.getElementById('login-email').value = 'demo@neura.com';
                 document.getElementById('login-password').value = 'demo123';
                 this.login();
             }
@@ -908,6 +897,7 @@
             launchProfiler() {
                 if (!this.currentUser) {
                     this.showScreen('login-screen');
+                    this.showError('Please sign in to create NPIs');
                     return;
                 }
                 window.open('profiler.html', '_blank');
@@ -916,6 +906,7 @@
             launchAvatarCreator() {
                 if (!this.currentUser) {
                     this.showScreen('login-screen');
+                    this.showError('Please sign in to create avatars');
                     return;
                 }
                 window.open('avatar.html', '_blank');
@@ -924,6 +915,7 @@
             launchLibrary() {
                 if (!this.currentUser) {
                     this.showScreen('login-screen');
+                    this.showError('Please sign in to access your library');
                     return;
                 }
                 window.open('library.html', '_blank');
@@ -951,7 +943,6 @@
             }
 
             showLoading(show) {
-                // Could implement a proper loading indicator
                 const buttons = document.querySelectorAll('.btn');
                 buttons.forEach(btn => {
                     btn.disabled = show;
@@ -959,10 +950,9 @@
             }
         }
 
-        // === INITIALIZATION ===
-        console.log('🌐 Initializing NPI Platform...');
-        window.app = new NPIPlatform();
-        console.log('✅ NPI Platform ready!');
+        console.log('🌐 Initializing Neura Platform...');
+        window.app = new NeuraPlatform();
+        console.log('✅ Neura Platform ready!');
     </script>
 </body>
 </html>
