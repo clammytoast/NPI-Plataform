@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NPI Library - Manage Your Digital Minds</title>
+    <title>Neura Library - Manage Your Digital Minds</title>
+    <script src="auth.js"></script>
     <style>
         * {
             margin: 0;
@@ -12,12 +13,12 @@
         }
 
         :root {
-            --primary: #4a5568;
-            --primary-dark: #2d3748;
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
             --secondary: #718096;
             --light: #f7fafc;
             --white: #ffffff;
-            --accent: #667eea;
+            --accent: #3b82f6;
             --success: #48bb78;
             --warning: #ed8936;
             --danger: #e53e3e;
@@ -25,7 +26,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
             min-height: 100vh;
             color: #333;
             padding: 20px;
@@ -347,6 +348,25 @@
             color: white;
         }
 
+        .auth-warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .user-info {
+            background: #dcfce7;
+            border: 1px solid #bbf7d0;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 768px) {
             .container {
                 margin: 0;
@@ -433,35 +453,43 @@
             <div class="container">
                 <div class="library-header">
                     <div>
-                        <h1>NPI Library</h1>
+                        <h1>Neura Library</h1>
                         <p class="subtitle">Manage Your Digital Minds</p>
+                        <div id="user-info" class="user-info">
+                            <!-- User info will be populated here -->
+                        </div>
                     </div>
                     <div class="library-actions">
-                        <button class="btn-primary" onclick="app.showScreen('create-screen')">Create New NPI</button>
-                        <button class="btn-secondary" onclick="app.showScreen('import-screen')">Import NPI</button>
+                        <button class="btn-primary" onclick="app.showScreen('create-screen')">Create New Profile</button>
+                        <button class="btn-secondary" onclick="app.showScreen('import-screen')">Import Profile</button>
                         <button class="btn-success" onclick="app.exportAllNPIs()">Export All</button>
                     </div>
+                </div>
+
+                <div id="auth-warning" class="auth-warning" style="display: none;">
+                    <p>⚠️ You are not signed in. Please sign in to access your personal Neura Library.</p>
+                    <button class="btn-primary" onclick="window.location.href='index.html'">Sign In to Neura</button>
                 </div>
 
                 <div class="success-message" id="success-message"></div>
                 <div class="error-message" id="error-message"></div>
 
                 <div id="npi-grid-container">
-                    <!-- NPI cards will be populated here -->
+                    <!-- Profile cards will be populated here -->
                 </div>
 
                 <div style="text-align: center; margin-top: 2rem;">
-                    <button class="btn-secondary" onclick="window.location.href='index.html'">← Back to Platform</button>
+                    <button class="btn-secondary" onclick="window.location.href='index.html'">← Back to Neura Platform</button>
                 </div>
             </div>
         </div>
 
-        <!-- Create NPI Screen -->
+        <!-- Create Profile Screen -->
         <div id="create-screen" class="screen">
             <div class="container">
                 <button class="back-button" onclick="app.showScreen('library-screen')">← Back to Library</button>
                 
-                <h1>Create New NPI</h1>
+                <h1>Create New Neura Profile</h1>
                 <p class="subtitle">Choose how you want to create your digital mind</p>
 
                 <div class="npi-grid">
@@ -470,7 +498,7 @@
                             <h3 class="npi-name">Complete Profiler</h3>
                             <span class="npi-type">Recommended</span>
                         </div>
-                        <p>Use our comprehensive 47-question profiler to build a detailed NPI based on your personality, values, and experiences.</p>
+                        <p>Use our comprehensive 47-question profiler to build a detailed profile based on your personality, values, and experiences.</p>
                         <div class="npi-stats">
                             <div class="stat">
                                 <div class="stat-number">47</div>
@@ -487,12 +515,12 @@
                         </div>
                     </div>
 
-                    <div class="npi-card" onclick="app.createQuickNPI()" style="cursor: pointer;">
+                    <div class="npi-card" onclick="app.createQuickProfile()" style="cursor: pointer;">
                         <div class="npi-card-header">
                             <h3 class="npi-name">Quick Setup</h3>
                             <span class="npi-type">Basic</span>
                         </div>
-                        <p>Create a basic NPI with essential personality traits for quick testing and development.</p>
+                        <p>Create a basic profile with essential personality traits for quick testing and development.</p>
                         <div class="npi-stats">
                             <div class="stat">
                                 <div class="stat-number">5</div>
@@ -561,211 +589,275 @@
             <div class="container">
                 <button class="back-button" onclick="app.showScreen('library-screen')">← Back to Library</button>
                 
-                <h1>Import NPI Brain</h1>
-                <p class="subtitle">Upload your .npibrain files or import from other sources</p>
+                <h1>Import Neura Profile</h1>
+                <p class="subtitle">Upload your .neura files or import from other sources</p>
 
                 <div class="import-area" id="import-area">
                     <div class="import-icon">📁</div>
-                    <h3>Drag & Drop Your .npibrain File</h3>
+                    <h3>Drag & Drop Your .neura File</h3>
                     <p>or click to browse your files</p>
-                    <input type="file" id="file-input" class="file-input" accept=".npibrain,.json">
+                    <input type="file" id="file-input" class="file-input" accept=".neura,.json">
                     <button class="btn-primary" onclick="document.getElementById('file-input').click()">Choose File</button>
                 </div>
 
                 <div class="loading" id="loading">
                     <div class="spinner"></div>
-                    <p>Importing NPI brain...</p>
+                    <p>Importing Neura profile...</p>
                 </div>
 
                 <div style="margin-top: 2rem; padding: 1.5rem; background: #f7fafc; border-radius: 8px;">
-                    <h3>Quick Demo NPIs</h3>
-                    <p>Start with these pre-built NPI examples</p>
+                    <h3>Quick Demo Profiles</h3>
+                    <p>Start with these pre-built Neura examples</p>
                     <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
-                        <button class="btn-secondary" onclick="app.createDemoNPI('balanced')">Balanced Analyst</button>
-                        <button class="btn-secondary" onclick="app.createDemoNPI('empathetic')">Empathic Listener</button>
-                        <button class="btn-secondary" onclick="app.createDemoNPI('strategic')">Strategic Planner</button>
+                        <button class="btn-secondary" onclick="app.createDemoProfile('balanced')">Balanced Analyst</button>
+                        <button class="btn-secondary" onclick="app.createDemoProfile('empathetic')">Empathic Listener</button>
+                        <button class="btn-secondary" onclick="app.createDemoProfile('strategic')">Strategic Planner</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- NPI Detail Screen -->
+        <!-- Profile Detail Screen -->
         <div id="detail-screen" class="screen">
             <div class="container">
                 <button class="back-button" onclick="app.showScreen('library-screen')">← Back to Library</button>
                 
                 <div id="npi-detail-content">
-                    <!-- NPI details will be populated here -->
+                    <!-- Profile details will be populated here -->
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // === COMPLETE NPI LIBRARY SYSTEM ===
-        class NPILibrary {
+        // === COMPLETE NEURA LIBRARY SYSTEM ===
+        class NeuraLibrary {
             constructor() {
-                this.npis = this.loadNPIs();
-                this.currentNPI = null;
-                console.log('📚 NPI Library initialized with', this.npis.length, 'NPIs');
+                this.profiles = this.loadProfiles();
+                this.currentProfile = null;
+                this.checkAuthentication();
+                console.log('📚 Neura Library initialized with', this.profiles.length, 'profiles for current user');
             }
 
-            // === STORAGE MANAGEMENT ===
-            loadNPIs() {
+            checkAuthentication() {
+                const user = auth.getCurrentUser();
+                const userInfo = document.getElementById('user-info');
+                const authWarning = document.getElementById('auth-warning');
+                const libraryActions = document.querySelector('.library-actions');
+
+                if (user) {
+                    userInfo.innerHTML = `👤 <strong>${user.name}</strong> • ${user.email} • ${this.profiles.length} profiles`;
+                    authWarning.style.display = 'none';
+                    if (libraryActions) {
+                        libraryActions.style.display = 'flex';
+                    }
+                } else {
+                    userInfo.innerHTML = '⚠️ <strong>Guest User</strong> • Sign in to save and manage profiles';
+                    authWarning.style.display = 'block';
+                    if (libraryActions) {
+                        libraryActions.style.display = 'none';
+                    }
+                }
+            }
+
+            // === ENHANCED: User-specific storage ===
+            loadProfiles() {
                 try {
-                    const stored = localStorage.getItem('npi_library');
+                    if (!auth.isAuthenticated()) {
+                        console.log('No user authenticated - returning empty library');
+                        return [];
+                    }
+                    
+                    const userKey = auth.getUserStorageKey('neura_library');
+                    const stored = localStorage.getItem(userKey);
                     return stored ? JSON.parse(stored) : [];
                 } catch (error) {
-                    console.error('Error loading NPIs:', error);
+                    console.error('Error loading profiles:', error);
                     return [];
                 }
             }
 
-            saveNPIs() {
+            saveProfiles() {
                 try {
-                    localStorage.setItem('npi_library', JSON.stringify(this.npis));
-                    console.log('💾 NPIs saved:', this.npis.length);
+                    if (!auth.isAuthenticated()) {
+                        console.error('Cannot save profiles - no user authenticated');
+                        this.showError('Please sign in to save profiles');
+                        return;
+                    }
+                    
+                    const userKey = auth.getUserStorageKey('neura_library');
+                    localStorage.setItem(userKey, JSON.stringify(this.profiles));
+                    console.log('💾 Profiles saved for user:', this.profiles.length);
                 } catch (error) {
-                    console.error('Error saving NPIs:', error);
-                    this.showError('Failed to save NPIs to storage');
+                    console.error('Error saving profiles:', error);
+                    this.showError('Failed to save profiles to storage');
                 }
             }
 
-            // === NPI MANAGEMENT ===
-            addNPI(npiData) {
-                const npi = {
-                    id: 'npi_' + Date.now(),
-                    name: npiData.metadata?.name || 'Unnamed NPI',
-                    type: npiData.metadata?.npi_type || 'custom',
+            // === ENHANCED: Add profile with user verification ===
+            addProfile(profileData) {
+                if (!auth.isAuthenticated()) {
+                    this.showError('Please sign in to save Neura Profiles');
+                    return null;
+                }
+
+                const profile = {
+                    id: 'neura_' + Date.now(),
+                    name: profileData.metadata?.name || 'Unnamed Neura Profile',
+                    type: profileData.metadata?.profile_type || 'custom',
                     created: new Date().toISOString(),
                     updated: new Date().toISOString(),
-                    data: npiData,
-                    stats: this.calculateStats(npiData)
+                    data: profileData,
+                    stats: this.calculateStats(profileData),
+                    owner: auth.getCurrentUser().id
                 };
                 
-                this.npis.unshift(npi); // Add to beginning
-                this.saveNPIs();
+                this.profiles.unshift(profile);
+                this.saveProfiles();
                 this.renderLibrary();
-                this.showSuccess(`NPI "${npi.name}" created successfully!`);
-                return npi;
+                this.checkAuthentication();
+                this.showSuccess(`Neura Profile "${profile.name}" created successfully!`);
+                return profile;
             }
 
-            updateNPI(id, updates) {
-                const index = this.npis.findIndex(npi => npi.id === id);
+            // === ENHANCED: Verify ownership before operations ===
+            updateProfile(id, updates) {
+                if (!this.verifyOwnership(id)) {
+                    this.showError('You do not have permission to modify this profile');
+                    return;
+                }
+
+                const index = this.profiles.findIndex(profile => profile.id === id);
                 if (index !== -1) {
-                    this.npis[index] = { ...this.npis[index], ...updates, updated: new Date().toISOString() };
-                    this.saveNPIs();
+                    this.profiles[index] = { ...this.profiles[index], ...updates, updated: new Date().toISOString() };
+                    this.saveProfiles();
                     this.renderLibrary();
-                    this.showSuccess('NPI updated successfully!');
+                    this.showSuccess('Profile updated successfully!');
                 }
             }
 
-            deleteNPI(id) {
-                const npi = this.npis.find(n => n.id === id);
-                if (npi && confirm(`Are you sure you want to delete "${npi.name}"? This action cannot be undone.`)) {
-                    this.npis = this.npis.filter(n => n.id !== id);
-                    this.saveNPIs();
+            deleteProfile(id) {
+                if (!this.verifyOwnership(id)) {
+                    this.showError('You do not have permission to delete this profile');
+                    return;
+                }
+
+                const profile = this.profiles.find(n => n.id === id);
+                if (profile && confirm(`Are you sure you want to delete "${profile.name}"? This action cannot be undone.`)) {
+                    this.profiles = this.profiles.filter(n => n.id !== id);
+                    this.saveProfiles();
                     this.renderLibrary();
-                    this.showSuccess(`NPI "${npi.name}" deleted successfully`);
+                    this.checkAuthentication();
+                    this.showSuccess(`Profile "${profile.name}" deleted successfully`);
                 }
             }
 
-            getNPI(id) {
-                return this.npis.find(npi => npi.id === id);
+            getProfile(id) {
+                return this.profiles.find(profile => profile.id === id);
+            }
+
+            // === NEW: Ownership verification ===
+            verifyOwnership(profileId) {
+                const profile = this.profiles.find(n => n.id === profileId);
+                const user = auth.getCurrentUser();
+                return profile && user && profile.owner === user.id;
             }
 
             // === RENDERING ===
             renderLibrary() {
                 const container = document.getElementById('npi-grid-container');
                 
-                if (this.npis.length === 0) {
+                if (this.profiles.length === 0) {
                     container.innerHTML = `
                         <div class="empty-state">
                             <div class="empty-state-icon">📚</div>
-                            <h3>No NPIs Yet</h3>
-                            <p>Create your first digital mind to get started</p>
-                            <button class="btn-primary" onclick="app.showScreen('create-screen')">Create Your First NPI</button>
+                            <h3>No Neura Profiles Yet</h3>
+                            <p>${auth.isAuthenticated() ? 'Create your first digital mind to get started' : 'Sign in to create and manage your profiles'}</p>
+                            ${auth.isAuthenticated() ? 
+                                '<button class="btn-primary" onclick="app.showScreen(\'create-screen\')">Create Your First Profile</button>' :
+                                '<button class="btn-primary" onclick="window.location.href=\'index.html\'">Sign In to Neura</button>'
+                            }
                         </div>
                     `;
                     return;
                 }
 
-                container.innerHTML = this.npis.map(npi => `
+                container.innerHTML = this.profiles.map(profile => `
                     <div class="npi-card">
                         <div class="npi-card-header">
-                            <h3 class="npi-name">${npi.name}</h3>
-                            <span class="npi-type">${npi.type}</span>
+                            <h3 class="npi-name">${profile.name}</h3>
+                            <span class="npi-type">${profile.type}</span>
                         </div>
                         
                         <div class="npi-stats">
                             <div class="stat">
-                                <div class="stat-number">${npi.stats.nodes}</div>
+                                <div class="stat-number">${profile.stats.nodes}</div>
                                 <div class="stat-label">Nodes</div>
                             </div>
                             <div class="stat">
-                                <div class="stat-number">${npi.stats.principles}</div>
+                                <div class="stat-number">${profile.stats.principles}</div>
                                 <div class="stat-label">Principles</div>
                             </div>
                             <div class="stat">
-                                <div class="stat-number">${npi.stats.questions}</div>
+                                <div class="stat-number">${profile.stats.questions}</div>
                                 <div class="stat-label">Questions</div>
                             </div>
                         </div>
 
                         <div class="npi-traits">
-                            ${npi.stats.traits.slice(0, 3).map(trait => `
+                            ${profile.stats.traits.slice(0, 3).map(trait => `
                                 <span class="trait">${trait}</span>
                             `).join('')}
-                            ${npi.stats.traits.length > 3 ? `<span class="trait">+${npi.stats.traits.length - 3}</span>` : ''}
+                            ${profile.stats.traits.length > 3 ? `<span class="trait">+${profile.stats.traits.length - 3}</span>` : ''}
                         </div>
 
                         <p style="color: #718096; font-size: 0.9rem; margin: 0.5rem 0;">
-                            Created: ${new Date(npi.created).toLocaleDateString()}
+                            Created: ${new Date(profile.created).toLocaleDateString()}
                         </p>
 
                         <div class="npi-actions">
-                            <button class="npi-action-btn action-primary" onclick="app.viewNPI('${npi.id}')">View</button>
-                            <button class="npi-action-btn action-secondary" onclick="app.exportNPI('${npi.id}')">Export</button>
-                            <button class="npi-action-btn action-secondary" onclick="app.launchAvatarCreator('${npi.id}')">Avatar</button>
-                            <button class="npi-action-btn action-danger" onclick="app.deleteNPI('${npi.id}')">Delete</button>
+                            <button class="npi-action-btn action-primary" onclick="app.viewProfile('${profile.id}')">View</button>
+                            <button class="npi-action-btn action-secondary" onclick="app.exportProfile('${profile.id}')">Export</button>
+                            <button class="npi-action-btn action-secondary" onclick="app.launchAvatarCreator('${profile.id}')">Avatar</button>
+                            <button class="npi-action-btn action-danger" onclick="app.deleteProfile('${profile.id}')">Delete</button>
                         </div>
                     </div>
                 `).join('');
             }
 
-            renderNPIDetail(id) {
-                const npi = this.getNPI(id);
-                if (!npi) return;
+            renderProfileDetail(id) {
+                const profile = this.getProfile(id);
+                if (!profile) return;
 
                 const container = document.getElementById('npi-detail-content');
                 container.innerHTML = `
                     <div class="detail-header">
                         <div>
-                            <h1>${npi.name}</h1>
-                            <p class="subtitle">${npi.type} • Created ${new Date(npi.created).toLocaleDateString()}</p>
+                            <h1>${profile.name}</h1>
+                            <p class="subtitle">${profile.type} • Created ${new Date(profile.created).toLocaleDateString()}</p>
                         </div>
                         <div style="display: flex; gap: 1rem;">
-                            <button class="btn-primary" onclick="app.exportNPI('${npi.id}')">Export</button>
-                            <button class="btn-secondary" onclick="app.launchAvatarCreator('${npi.id}')">Create Avatar</button>
-                            <button class="btn-danger" onclick="app.deleteNPI('${npi.id}')">Delete</button>
+                            <button class="btn-primary" onclick="app.exportProfile('${profile.id}')">Export</button>
+                            <button class="btn-secondary" onclick="app.launchAvatarCreator('${profile.id}')">Create Avatar</button>
+                            <button class="btn-danger" onclick="app.deleteProfile('${profile.id}')">Delete</button>
                         </div>
                     </div>
 
                     <div class="detail-stats">
                         <div class="detail-stat">
-                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">${npi.stats.nodes}</div>
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">${profile.stats.nodes}</div>
                             <div>Neural Nodes</div>
                         </div>
                         <div class="detail-stat">
-                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">${npi.stats.principles}</div>
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">${profile.stats.principles}</div>
                             <div>Core Principles</div>
                         </div>
                         <div class="detail-stat">
-                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">${npi.stats.questions}</div>
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">${profile.stats.questions}</div>
                             <div>Questions Answered</div>
                         </div>
                         <div class="detail-stat">
-                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">${npi.stats.connections}</div>
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">${profile.stats.connections}</div>
                             <div>Connections</div>
                         </div>
                     </div>
@@ -773,7 +865,7 @@
                     <div class="detail-section">
                         <h3>Personality Traits</h3>
                         <div class="npi-traits">
-                            ${npi.stats.traits.map(trait => `
+                            ${profile.stats.traits.map(trait => `
                                 <span class="trait">${trait}</span>
                             `).join('')}
                         </div>
@@ -781,15 +873,15 @@
 
                     <div class="detail-section">
                         <h3>Reasoning System</h3>
-                        <p><strong>Default Style:</strong> ${npi.data.brain_architecture?.reasoning_system?.default_style || 'balanced_analysis'}</p>
-                        <p><strong>Base Mood:</strong> ${npi.data.brain_architecture?.emotional_system?.base_mood || 'reflective_calm'}</p>
+                        <p><strong>Default Style:</strong> ${profile.data.brain_architecture?.reasoning_system?.default_style || 'balanced_analysis'}</p>
+                        <p><strong>Base Mood:</strong> ${profile.data.brain_architecture?.emotional_system?.base_mood || 'reflective_calm'}</p>
                     </div>
 
                     <div class="detail-section">
                         <h3>Moral Framework</h3>
-                        ${npi.data.brain_architecture?.moral_framework?.principles ? `
+                        ${profile.data.brain_architecture?.moral_framework?.principles ? `
                             <ul style="margin-left: 1.5rem;">
-                                ${npi.data.brain_architecture.moral_framework.principles.map(p => `
+                                ${profile.data.brain_architecture.moral_framework.principles.map(p => `
                                     <li><strong>${p.name}:</strong> ${(p.strength * 100).toFixed(0)}% strength</li>
                                 `).join('')}
                             </ul>
@@ -798,36 +890,35 @@
 
                     <div class="detail-section">
                         <h3>Technical Details</h3>
-                        <p><strong>NPI Spec Version:</strong> ${npi.data.npi_spec_version || '1.0'}</p>
-                        <p><strong>Created:</strong> ${new Date(npi.data.metadata?.created_date || npi.created).toLocaleString()}</p>
-                        <p><strong>Type:</strong> ${npi.data.metadata?.npi_type || 'nurture_based'}</p>
+                        <p><strong>Neura Spec Version:</strong> ${profile.data.neura_spec_version || '1.0'}</p>
+                        <p><strong>Created:</strong> ${new Date(profile.data.metadata?.created_date || profile.created).toLocaleString()}</p>
+                        <p><strong>Type:</strong> ${profile.data.metadata?.profile_type || 'nurture_based'}</p>
                     </div>
                 `;
             }
 
             // === UTILITIES ===
-            calculateStats(npiData) {
+            calculateStats(profileData) {
                 return {
-                    nodes: npiData.brain_architecture?.neural_network?.nodes || 25,
-                    connections: npiData.brain_architecture?.neural_network?.connections || 75,
-                    principles: npiData.brain_architecture?.moral_framework?.principles?.length || 3,
-                    questions: npiData.metadata?.questions_answered || 0,
-                    traits: this.extractTraits(npiData)
+                    nodes: profileData.brain_architecture?.neural_network?.nodes || 25,
+                    connections: profileData.brain_architecture?.neural_network?.connections || 75,
+                    principles: profileData.brain_architecture?.moral_framework?.principles?.length || 3,
+                    questions: profileData.metadata?.questions_answered || 0,
+                    traits: this.extractTraits(profileData)
                 };
             }
 
-            extractTraits(npiData) {
+            extractTraits(profileData) {
                 const traits = [];
-                const reasoning = npiData.brain_architecture?.reasoning_system?.default_style;
+                const reasoning = profileData.brain_architecture?.reasoning_system?.default_style;
                 if (reasoning) traits.push(reasoning.replace(/_/g, ' '));
                 
-                const mood = npiData.brain_architecture?.emotional_system?.base_mood;
+                const mood = profileData.brain_architecture?.emotional_system?.base_mood;
                 if (mood) traits.push(mood.replace(/_/g, ' '));
                 
-                // Add some default traits based on common patterns
                 traits.push('experience-based', 'value-driven', 'adaptive');
                 
-                return traits.slice(0, 6); // Limit to 6 traits
+                return traits.slice(0, 6);
             }
 
             // === SCREEN MANAGEMENT ===
@@ -842,32 +933,31 @@
                 }
             }
 
-            viewNPI(id) {
-                this.currentNPI = id;
-                this.renderNPIDetail(id);
+            viewProfile(id) {
+                this.currentProfile = id;
+                this.renderProfileDetail(id);
                 this.showScreen('detail-screen');
             }
 
             // === IMPORT/EXPORT ===
-            importNPI(file) {
+            importProfile(file) {
                 const loading = document.getElementById('loading');
                 loading.classList.add('show');
 
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     try {
-                        const npiData = JSON.parse(e.target.result);
+                        const profileData = JSON.parse(e.target.result);
                         
-                        // Validate it's an NPI brain file
-                        if (!npiData.npi_spec_version || !npiData.brain_architecture) {
-                            throw new Error('Invalid NPI brain file format');
+                        if (!profileData.neura_spec_version || !profileData.brain_architecture) {
+                            throw new Error('Invalid Neura profile file format');
                         }
 
-                        this.addNPI(npiData);
+                        this.addProfile(profileData);
                         this.showScreen('library-screen');
                         
                     } catch (error) {
-                        this.showError('Invalid NPI brain file: ' + error.message);
+                        this.showError('Invalid Neura profile file: ' + error.message);
                     } finally {
                         loading.classList.remove('show');
                     }
@@ -881,58 +971,67 @@
                 reader.readAsText(file);
             }
 
-            exportNPI(id) {
-                const npi = this.getNPI(id);
-                if (!npi) return;
+            exportProfile(id) {
+                const profile = this.getProfile(id);
+                if (!profile) return;
 
-                const blob = new Blob([JSON.stringify(npi.data, null, 2)], { type: 'application/json' });
+                const blob = new Blob([JSON.stringify(profile.data, null, 2)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = `${npi.name.replace(/[^a-z0-9]/gi, '_')}.npibrain`;
+                link.download = `${profile.name.replace(/[^a-z0-9]/gi, '_')}.neura`;
                 link.click();
                 URL.revokeObjectURL(url);
                 
-                this.showSuccess(`NPI "${npi.name}" exported successfully!`);
+                this.showSuccess(`Neura Profile "${profile.name}" exported successfully!`);
             }
 
-            exportAllNPIs() {
-                if (this.npis.length === 0) {
-                    this.showError('No NPIs to export');
+            exportAllProfiles() {
+                if (this.profiles.length === 0) {
+                    this.showError('No profiles to export');
                     return;
                 }
 
                 const exportData = {
                     export_version: "1.0",
                     exported_at: new Date().toISOString(),
-                    total_npis: this.npis.length,
-                    npis: this.npis.map(npi => npi.data)
+                    total_profiles: this.profiles.length,
+                    profiles: this.profiles.map(profile => profile.data)
                 };
 
                 const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = `npi_library_backup_${Date.now()}.json`;
+                link.download = `neura_library_backup_${Date.now()}.json`;
                 link.click();
                 URL.revokeObjectURL(url);
                 
-                this.showSuccess(`Exported ${this.npis.length} NPIs successfully!`);
+                this.showSuccess(`Exported ${this.profiles.length} profiles successfully!`);
             }
 
             // === CREATION METHODS ===
             launchProfiler() {
+                if (!auth.isAuthenticated()) {
+                    this.showError('Please sign in to create profiles');
+                    return;
+                }
                 window.open('profiler.html', '_blank');
             }
 
-            createQuickNPI() {
-                const quickNPI = {
-                    npi_spec_version: "1.0",
+            createQuickProfile() {
+                if (!auth.isAuthenticated()) {
+                    this.showError('Please sign in to create profiles');
+                    return;
+                }
+
+                const quickProfile = {
+                    neura_spec_version: "1.0",
                     metadata: {
-                        name: "Quick NPI - " + new Date().toLocaleDateString(),
+                        name: "Quick Profile - " + new Date().toLocaleDateString(),
                         creator: "quick_setup",
                         created_date: new Date().toISOString(),
-                        npi_type: "quick_build",
+                        profile_type: "quick_build",
                         questions_answered: 0
                     },
                     brain_architecture: {
@@ -958,11 +1057,16 @@
                     }
                 };
 
-                this.addNPI(quickNPI);
+                this.addProfile(quickProfile);
                 this.showScreen('library-screen');
             }
 
             createFromTemplate(templateType) {
+                if (!auth.isAuthenticated()) {
+                    this.showError('Please sign in to create profiles');
+                    return;
+                }
+
                 const templates = {
                     analytical: {
                         name: "Analytical Thinker",
@@ -980,13 +1084,13 @@
 
                 const template = templates[templateType] || templates.analytical;
 
-                const templateNPI = {
-                    npi_spec_version: "1.0",
+                const templateProfile = {
+                    neura_spec_version: "1.0",
                     metadata: {
                         name: template.name + " - " + new Date().toLocaleDateString(),
                         creator: "template",
                         created_date: new Date().toISOString(),
-                        npi_type: "template_based",
+                        profile_type: "template_based",
                         questions_answered: 0
                     },
                     brain_architecture: {
@@ -1012,11 +1116,11 @@
                     }
                 };
 
-                this.addNPI(templateNPI);
+                this.addProfile(templateProfile);
                 this.showScreen('library-screen');
             }
 
-            createDemoNPI(type) {
+            createDemoProfile(type) {
                 const demos = {
                     balanced: {
                         name: "Balanced Analyst",
@@ -1037,13 +1141,13 @@
 
                 const demo = demos[type] || demos.balanced;
 
-                const demoNPI = {
-                    npi_spec_version: "1.0",
+                const demoProfile = {
+                    neura_spec_version: "1.0",
                     metadata: {
                         name: demo.name,
                         creator: "demo",
                         created_date: new Date().toISOString(),
-                        npi_type: "demo",
+                        profile_type: "demo",
                         questions_answered: 0
                     },
                     brain_architecture: {
@@ -1069,18 +1173,47 @@
                     }
                 };
 
-                this.addNPI(demoNPI);
+                this.addProfile(demoProfile);
                 this.showScreen('library-screen');
             }
 
-            launchAvatarCreator(npiId) {
-                const npi = this.getNPI(npiId);
-                if (npi) {
-                    // Store the selected NPI for the avatar creator
-                    localStorage.setItem('current_npi_for_avatar', JSON.stringify(npi.data));
-                    this.showSuccess(`"${npi.name}" sent to Avatar Creator! Return to the Avatar Creator tab to continue.`);
+            // === ENHANCED: Launch Avatar Creator with better tab communication ===
+            launchAvatarCreator(profileId) {
+                if (!this.verifyOwnership(profileId)) {
+                    this.showError('You do not have permission to use this profile');
+                    return;
+                }
+
+                const profile = this.getProfile(profileId);
+                if (profile) {
+                    const transferData = {
+                        profileData: profile.data,
+                        source: 'library',
+                        timestamp: Date.now(),
+                        userId: auth.getCurrentUser().id
+                    };
+                    
+                    localStorage.setItem('current_npi_for_avatar', JSON.stringify(transferData));
+                    
+                    this.showSuccess(`"${profile.name}" sent to Avatar Creator! Closing library...`);
+                    
+                    setTimeout(() => {
+                        const avatarWindow = window.open('avatar.html', '_blank');
+                        if (avatarWindow) {
+                            avatarWindow.focus();
+                        }
+                        setTimeout(() => {
+                            // Close this tab or go back
+                            if (window.history.length > 1) {
+                                window.close();
+                            } else {
+                                window.location.href = 'index.html';
+                            }
+                        }, 1000);
+                    }, 1500);
+                    
                 } else {
-                    this.showError('NPI not found');
+                    this.showError('Profile not found');
                 }
             }
 
@@ -1103,7 +1236,7 @@
             initialize() {
                 this.setupEventListeners();
                 this.renderLibrary();
-                console.log('✅ NPI Library ready');
+                console.log('✅ Neura Library ready');
             }
 
             setupEventListeners() {
@@ -1113,10 +1246,10 @@
                 
                 fileInput.addEventListener('change', (e) => {
                     const file = e.target.files[0];
-                    if (file && (file.name.endsWith('.npibrain') || file.name.endsWith('.json'))) {
-                        this.importNPI(file);
+                    if (file && (file.name.endsWith('.neura') || file.name.endsWith('.json'))) {
+                        this.importProfile(file);
                     } else {
-                        this.showError('Please select a valid .npibrain or .json file');
+                        this.showError('Please select a valid .neura or .json file');
                     }
                 });
 
@@ -1138,41 +1271,40 @@
                     importArea.style.background = '#f7fafc';
                     
                     const file = e.dataTransfer.files[0];
-                    if (file && (file.name.endsWith('.npibrain') || file.name.endsWith('.json'))) {
-                        this.importNPI(file);
+                    if (file && (file.name.endsWith('.neura') || file.name.endsWith('.json'))) {
+                        this.importProfile(file);
                     } else {
-                        this.showError('Please drop a valid .npibrain or .json file');
+                        this.showError('Please drop a valid .neura or .json file');
                     }
                 });
             }
         }
 
         // === GLOBAL ACCESS ===
-        window.app = new NPILibrary();
+        window.app = new NeuraLibrary();
 
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', () => {
             window.app.initialize();
         });
 
-        // Listen for NPI creations from other pages
+        // Listen for profile creations from other pages
         window.addEventListener('storage', (e) => {
-            if (e.key === 'npi_library') {
-                window.app.npis = window.app.loadNPIs();
+            if (e.key === 'neura_library') {
+                window.app.profiles = window.app.loadProfiles();
                 window.app.renderLibrary();
             }
         });
 
-        // Check if we have a new NPI to add (from profiler)
+        // Check if we have a new profile to add (from profiler)
         window.addEventListener('load', () => {
-            const newNPI = localStorage.getItem('new_npi_created');
-            if (newNPI) {
-                try {
-                    const npiData = JSON.parse(newNPI);
-                    window.app.addNPI(npiData);
-                    localStorage.removeItem('new_npi_created');
-                } catch (error) {
-                    console.error('Error processing new NPI:', error);
+            const user = auth.getCurrentUser();
+            if (user) {
+                const userKey = auth.getUserStorageKey('neura_library');
+                const stored = localStorage.getItem(userKey);
+                if (stored) {
+                    window.app.profiles = JSON.parse(stored);
+                    window.app.renderLibrary();
                 }
             }
         });
