@@ -9,35 +9,97 @@ class NPIQuestionnaire {
     }
 
     async loadQuestionnaireData() {
+        console.log('📥 Loading questionnaire data...');
         try {
-            // Load from external JSON file
-            const response = await fetch('data/questions.json');
-            const data = await response.json();
-            this.sections = data.sections;
+            // Try multiple paths for GitHub Pages compatibility
+            const possiblePaths = [
+                './data/questions.json',
+                '/data/questions.json', 
+                'data/questions.json',
+                './npi-profiler/data/questions.json'
+            ];
+            
+            let data = null;
+            for (const path of possiblePaths) {
+                try {
+                    console.log(`🔍 Trying path: ${path}`);
+                    const response = await fetch(path);
+                    if (response.ok) {
+                        data = await response.json();
+                        console.log('✅ Loaded questions from:', path);
+                        break;
+                    }
+                } catch (e) {
+                    console.log('❌ Failed to load from:', path);
+                    continue;
+                }
+            }
+            
+            if (data && data.sections) {
+                this.sections = data.sections;
+                console.log(`✅ Loaded ${this.sections.length} sections with ${this.getTotalQuestions()} total questions`);
+            } else {
+                console.log('⚠️ Using fallback questions');
+                this.loadFallbackQuestions();
+            }
         } catch (error) {
-            console.error('Failed to load questionnaire data:', error);
-            // Fallback to embedded questions
+            console.error('❌ Failed to load questionnaire data:', error);
             this.loadFallbackQuestions();
         }
     }
 
     loadFallbackQuestions() {
-        // Embedded fallback questions if JSON fails
+        // Embedded basic questions as fallback
         this.sections = [
             {
                 id: "developmental_history",
                 name: "Life Experiences & Development", 
+                description: "These questions explore your early formative experiences and how they shaped your fundamental sense of safety and understanding.",
                 questions: [
                     {
                         id: "early_childhood_moments",
                         text: "When you think back to your early childhood, what moments stand out the most emotionally?",
                         type: "text",
-                        maxLength: 1500
+                        maxLength: 1500,
+                        placeholder: "Describe the moments that feel most significant, whether happy, scary, confusing, or comforting..."
                     },
-                    // ... include essential questions as fallback
+                    {
+                        id: "childhood_safety", 
+                        text: "Can you describe a time when you felt very safe or very unsafe as a child?",
+                        type: "text",
+                        maxLength: 1200,
+                        placeholder: "What was happening? Who was there? How did your body feel?"
+                    }
+                ]
+            },
+            {
+                id: "personality_assessment",
+                name: "Core Personality Assessment",
+                description: "Scientific personality assessment to map your fundamental traits and tendencies.",
+                questions: [
+                    {
+                        id: "big5_openness",
+                        text: "How open are you to new experiences, ideas, and unconventional thinking?",
+                        type: "scale",
+                        min: 1,
+                        max: 10,
+                        minLabel: "Very Traditional",
+                        maxLabel: "Very Adventurous"
+                    },
+                    {
+                        id: "big5_conscientiousness",
+                        text: "How organized, disciplined, and reliable are you?",
+                        type: "scale",
+                        min: 1,
+                        max: 10,
+                        minLabel: "Very Spontaneous", 
+                        maxLabel: "Very Organized"
+                    }
                 ]
             }
         ];
+        
+        console.log(`✅ Fallback loaded: ${this.sections.length} sections`);
     }
 
     getCurrentSection() {
@@ -58,7 +120,8 @@ class NPIQuestionnaire {
     }
 
     getProgress() {
-        return (this.getAnsweredCount() / this.getTotalQuestions()) * 100;
+        const total = this.getTotalQuestions();
+        return total > 0 ? (this.getAnsweredCount() / total) * 100 : 0;
     }
 
     saveResponse(questionId, response) {
@@ -96,9 +159,7 @@ class NPIQuestionnaire {
     }
 
     isComplete() {
-        const totalQuestions = this.sections.reduce((total, section) => 
-            total + section.questions.length, 0);
-        return Object.keys(this.responses).length >= totalQuestions;
+        return this.getAnsweredCount() >= this.getTotalQuestions();
     }
 
     getAllResponses() {
