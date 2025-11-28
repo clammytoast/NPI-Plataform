@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NPI Avatar Creator - Bring Your Digital Mind to Life</title>
+    <title>Neura Avatar Creator - Bring Your Digital Mind to Life</title>
+    <script src="auth.js"></script>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
         * {
@@ -14,7 +15,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
             min-height: 100vh;
             color: #333;
             padding: 20px;
@@ -71,12 +72,12 @@
         }
 
         .btn-primary {
-            background: #4a5568;
+            background: #7c3aed;
             color: white;
         }
 
         .btn-primary:hover {
-            background: #2d3748;
+            background: #6d28d9;
             transform: translateY(-2px);
         }
 
@@ -100,12 +101,12 @@
         }
 
         .upload-area:hover {
-            border-color: #4a5568;
+            border-color: #7c3aed;
             background: #edf2f7;
         }
 
         .upload-area.drag-over {
-            border-color: #4a5568;
+            border-color: #7c3aed;
             background: #e2e8f0;
         }
 
@@ -146,14 +147,14 @@
             background: #f7fafc;
         }
 
-        .npi-integration-panel {
+        .neura-integration-panel {
             background: #f7fafc;
             padding: 2rem;
             border-radius: 12px;
-            border-left: 4px solid #4a5568;
+            border-left: 4px solid #7c3aed;
         }
 
-        .npi-stats {
+        .neura-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
@@ -171,7 +172,7 @@
         .stat-number {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #4a5568;
+            color: #7c3aed;
         }
 
         .stat-label {
@@ -202,7 +203,7 @@
 
         .trait-fill {
             height: 100%;
-            background: #4a5568;
+            background: #7c3aed;
             border-radius: 4px;
             transition: width 0.5s ease;
         }
@@ -245,7 +246,7 @@
 
         .spinner {
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #4a5568;
+            border-top: 4px solid #7c3aed;
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -310,6 +311,26 @@
             border-radius: 4px;
         }
 
+        .user-status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .user-status.signed-in {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .user-status.signed-out {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
         @media (max-width: 768px) {
             .container {
                 margin: 0;
@@ -328,7 +349,7 @@
                 flex-direction: column;
             }
             
-            .npi-stats {
+            .neura-stats {
                 grid-template-columns: 1fr;
             }
         }
@@ -365,7 +386,7 @@
             width: 200px;
             height: 200px;
             margin: 0 auto;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -380,21 +401,26 @@
         <!-- Welcome Screen -->
         <div id="welcome-screen" class="screen active">
             <div class="container">
-                <h1>NPI Avatar Creator</h1>
+                <h1>Neura Avatar Creator</h1>
                 <p class="subtitle">Bring Your Digital Mind to Life with Ready Player Me</p>
+                
+                <div id="user-status">
+                    <!-- User status will be populated here -->
+                </div>
+                
                 <div class="welcome-content">
-                    <p>Upload your .npibrain file to create a personalized 3D avatar that embodies your unique personality, reasoning style, and emotional patterns.</p>
-                    <p><strong>Sources for NPI Brains:</strong></p>
+                    <p>Upload your .neura file to create a personalized 3D avatar that embodies your unique personality, reasoning style, and emotional patterns.</p>
+                    <p><strong>Sources for Neura Profiles:</strong></p>
                     <ul style="text-align: left; display: inline-block; margin: 1rem 0;">
                         <li>Create avatars with Ready Player Me's easy editor</li>
-                        <li>Upload .npibrain files from the NPI Profiler</li>
-                        <li>Load from your personal NPI Library</li>
-                        <li>Use demo brains for testing</li>
+                        <li>Upload .neura files from the Neura Profiler</li>
+                        <li>Load from your personal Neura Library</li>
+                        <li>Use demo profiles for testing</li>
                     </ul>
                     <button class="btn-primary" onclick="app.startAvatarCreation()">Start Avatar Creation</button>
                     <div style="margin-top: 1rem;">
                         <button class="btn-secondary" onclick="app.showDemo()">See Demo</button>
-                        <button class="btn-secondary" onclick="app.openLibrary()">Open NPI Library</button>
+                        <button class="btn-secondary" onclick="app.openLibrary()">Open Neura Library</button>
                     </div>
                 </div>
             </div>
@@ -403,8 +429,12 @@
         <!-- Upload Screen -->
         <div id="upload-screen" class="screen">
             <div class="container">
-                <h1>Upload Your NPI Brain</h1>
-                <p class="subtitle">Import your .npibrain file to personalize your avatar</p>
+                <h1>Upload Your Neura Profile</h1>
+                <p class="subtitle">Import your .neura file to personalize your avatar</p>
+                
+                <div id="user-status-upload">
+                    <!-- User status will be populated here -->
+                </div>
                 
                 <div class="error-message" id="error-message">
                     Error message will appear here
@@ -412,27 +442,27 @@
                 
                 <div class="upload-area" id="upload-area">
                     <div class="upload-icon">📁</div>
-                    <h3>Drag & Drop Your .npibrain File</h3>
+                    <h3>Drag & Drop Your .neura File</h3>
                     <p>or click to browse your files</p>
-                    <input type="file" id="file-input" class="file-input" accept=".npibrain,.json">
+                    <input type="file" id="file-input" class="file-input" accept=".neura,.json">
                     <button class="btn-primary" onclick="document.getElementById('file-input').click()">Choose File</button>
                 </div>
 
                 <div class="file-info" id="file-info">
-                    <h4>📊 NPI Brain Loaded Successfully!</h4>
+                    <h4>📊 Neura Profile Loaded Successfully!</h4>
                     <div id="file-details"></div>
                     <button class="btn-primary" onclick="app.proceedToAvatar()">Create Avatar</button>
                 </div>
 
                 <div class="loading" id="loading">
                     <div class="spinner"></div>
-                    <p>Analyzing your NPI brain...</p>
+                    <p>Analyzing your Neura profile...</p>
                 </div>
 
                 <div style="text-align: center; margin-top: 2rem;">
                     <button class="btn-secondary" onclick="app.showWelcome()">← Back</button>
-                    <button class="btn-secondary" onclick="app.loadDemoBrain()">Use Demo Brain</button>
-                    <button class="btn-primary" onclick="app.loadFromLibrary()">Load from NPI Library</button>
+                    <button class="btn-secondary" onclick="app.loadDemoProfile()">Use Demo Profile</button>
+                    <button class="btn-primary" onclick="app.loadFromLibrary()">Load from Neura Library</button>
                 </div>
             </div>
         </div>
@@ -471,12 +501,12 @@
                         </div>
                     </div>
                     
-                    <div class="npi-integration-panel">
-                        <h3>NPI Personality Integration</h3>
-                        <div id="npi-integration-content">
-                            <p>Your avatar will be configured based on your NPI brain's personality traits and reasoning patterns.</p>
+                    <div class="neura-integration-panel">
+                        <h3>Neura Personality Integration</h3>
+                        <div id="neura-integration-content">
+                            <p>Your avatar will be configured based on your Neura profile's personality traits and reasoning patterns.</p>
                             
-                            <div class="npi-stats" id="npi-stats">
+                            <div class="neura-stats" id="neura-stats">
                                 <!-- Stats will be populated here -->
                             </div>
                             
@@ -525,7 +555,7 @@
         <!-- Preview Screen -->
         <div id="preview-screen" class="screen">
             <div class="container">
-                <h1>Your NPI Avatar is Ready!</h1>
+                <h1>Your Neura Avatar is Ready!</h1>
                 <p class="subtitle">Meet your digital embodiment</p>
                 
                 <div class="preview-area">
@@ -534,10 +564,10 @@
                     </div>
                     
                     <div class="success-message" id="success-message">
-                        ✅ Avatar successfully configured with your NPI personality!
+                        ✅ Avatar successfully configured with your Neura personality!
                     </div>
 
-                    <div class="npi-stats" id="final-stats">
+                    <div class="neura-stats" id="final-stats">
                         <!-- Final stats will be populated here -->
                     </div>
                 </div>
@@ -557,31 +587,62 @@
     </div>
 
     <script>
-        // === COMPLETE AVATAR CREATOR ===
-        class NPIAvatarCreator {
+        // === COMPLETE NEURA AVATAR CREATOR ===
+        class NeuraAvatarCreator {
             constructor() {
-                this.currentNPIBrain = null;
+                this.currentNeuraProfile = null;
                 this.avatarUrl = null;
                 this.avatarConfig = {};
-                this.subdomain = 'npi-plataform';
+                this.subdomain = 'neura-platform';
                 
-                // === ADDED: Check for NPI from library ===
-                this.loadNPIFromLibrary();
-                console.log('🚀 NPI Avatar Creator initialized with subdomain:', this.subdomain);
+                this.checkAuthentication();
+                this.loadProfileFromLibrary();
+                console.log('🚀 Neura Avatar Creator initialized with subdomain:', this.subdomain);
             }
 
-            // === ADDED: Load NPI from library ===
-            loadNPIFromLibrary() {
+            checkAuthentication() {
+                const user = auth.getCurrentUser();
+                const userStatus = document.getElementById('user-status');
+                const userStatusUpload = document.getElementById('user-status-upload');
+
+                if (user) {
+                    const statusHTML = `<div class="user-status signed-in">✅ Signed in as ${user.name}</div>`;
+                    if (userStatus) userStatus.innerHTML = statusHTML;
+                    if (userStatusUpload) userStatusUpload.innerHTML = statusHTML;
+                } else {
+                    const statusHTML = `<div class="user-status signed-out">⚠️ Guest User - Some features may be limited</div>`;
+                    if (userStatus) userStatus.innerHTML = statusHTML;
+                    if (userStatusUpload) userStatusUpload.innerHTML = statusHTML;
+                }
+            }
+
+            // === ENHANCED: Load profile from library with ownership verification ===
+            loadProfileFromLibrary() {
                 try {
-                    const storedNPI = localStorage.getItem('current_npi_for_avatar');
-                    if (storedNPI) {
-                        this.currentNPIBrain = JSON.parse(storedNPI);
-                        console.log('📁 Loaded NPI from library:', this.currentNPIBrain.metadata?.name);
-                        // Clear it after loading so we don't keep reloading the same one
-                        localStorage.removeItem('current_npi_for_avatar');
+                    const storedTransfer = localStorage.getItem('current_npi_for_avatar');
+                    if (storedTransfer) {
+                        const transferData = JSON.parse(storedTransfer);
+                        const currentUser = auth.getCurrentUser();
+                        
+                        if (transferData.userId && currentUser && transferData.userId === currentUser.id) {
+                            this.currentNeuraProfile = transferData.profileData;
+                            console.log('📁 Loaded Neura Profile from library:', this.currentNeuraProfile.metadata?.name);
+                            
+                            localStorage.removeItem('current_npi_for_avatar');
+                            
+                            // Auto-proceed if we're on upload screen
+                            if (document.getElementById('upload-screen').classList.contains('active')) {
+                                this.proceedToAvatar();
+                            } else {
+                                this.showSuccess('Profile loaded from library!');
+                            }
+                        } else {
+                            console.warn('Neura Profile ownership verification failed');
+                            this.showError('This profile does not belong to your account');
+                        }
                     }
                 } catch (error) {
-                    console.error('Error loading NPI from library:', error);
+                    console.error('Error loading profile from library:', error);
                 }
             }
 
@@ -641,19 +702,19 @@
 
             handleFileSelect(event) {
                 const file = event.target.files[0];
-                if (file && (file.name.endsWith('.npibrain') || file.name.endsWith('.json'))) {
-                    this.processNPIBrainFile(file);
+                if (file && (file.name.endsWith('.neura') || file.name.endsWith('.json'))) {
+                    this.processNeuraProfileFile(file);
                 } else {
-                    this.showError('Please select a valid .npibrain or .json file');
+                    this.showError('Please select a valid .neura or .json file');
                 }
             }
 
             handleFileDrop(event) {
                 const file = event.dataTransfer.files[0];
-                if (file && (file.name.endsWith('.npibrain') || file.name.endsWith('.json'))) {
-                    this.processNPIBrainFile(file);
+                if (file && (file.name.endsWith('.neura') || file.name.endsWith('.json'))) {
+                    this.processNeuraProfileFile(file);
                 } else {
-                    this.showError('Please drop a valid .npibrain or .json file');
+                    this.showError('Please drop a valid .neura or .json file');
                 }
             }
 
@@ -667,7 +728,19 @@
                 }, 5000);
             }
 
-            processNPIBrainFile(file) {
+            showSuccess(message) {
+                // Create a temporary success message
+                const successElement = document.createElement('div');
+                successElement.className = 'success-message show';
+                successElement.textContent = message;
+                document.querySelector('.container').insertBefore(successElement, document.querySelector('.container').firstChild);
+                
+                setTimeout(() => {
+                    successElement.remove();
+                }, 3000);
+            }
+
+            processNeuraProfileFile(file) {
                 const loading = document.getElementById('loading');
                 const fileInfo = document.getElementById('file-info');
                 
@@ -676,7 +749,7 @@
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     try {
-                        this.currentNPIBrain = JSON.parse(e.target.result);
+                        this.currentNeuraProfile = JSON.parse(e.target.result);
                         setTimeout(() => {
                             loading.classList.remove('show');
                             this.displayFileInfo(file);
@@ -684,7 +757,7 @@
                         }, 1500);
                     } catch (error) {
                         loading.classList.remove('show');
-                        this.showError('Error reading NPI brain file. Please ensure it\'s a valid JSON file.');
+                        this.showError('Error reading Neura profile file. Please ensure it\'s a valid JSON file.');
                         console.error('File parsing error:', error);
                     }
                 };
@@ -697,35 +770,35 @@
 
             displayFileInfo(file) {
                 const fileDetails = document.getElementById('file-details');
-                const brain = this.currentNPIBrain;
+                const profile = this.currentNeuraProfile;
                 
                 fileDetails.innerHTML = `
-                    <p><strong>Name:</strong> ${brain.metadata?.name || 'Unnamed NPI'}</p>
-                    <p><strong>Created:</strong> ${brain.metadata?.created_date ? new Date(brain.metadata.created_date).toLocaleDateString() : 'Unknown'}</p>
-                    <p><strong>Type:</strong> ${brain.metadata?.npi_type || 'nurture_based'}</p>
-                    <p><strong>Nodes:</strong> ${brain.brain_architecture?.neural_network?.nodes || 'N/A'}</p>
-                    <p><strong>Reasoning Style:</strong> ${brain.brain_architecture?.reasoning_system?.default_style || 'balanced'}</p>
+                    <p><strong>Name:</strong> ${profile.metadata?.name || 'Unnamed Neura Profile'}</p>
+                    <p><strong>Created:</strong> ${profile.metadata?.created_date ? new Date(profile.metadata.created_date).toLocaleDateString() : 'Unknown'}</p>
+                    <p><strong>Type:</strong> ${profile.metadata?.profile_type || 'nurture_based'}</p>
+                    <p><strong>Nodes:</strong> ${profile.brain_architecture?.neural_network?.nodes || 'N/A'}</p>
+                    <p><strong>Reasoning Style:</strong> ${profile.brain_architecture?.reasoning_system?.default_style || 'balanced'}</p>
                 `;
             }
 
-            // === MODIFIED: Improved proceedToAvatar with library support ===
+            // === ENHANCED: Improved proceedToAvatar with library support ===
             proceedToAvatar() {
-                if (!this.currentNPIBrain) {
-                    const useDemo = confirm('No NPI brain loaded. Would you like to use a demo brain instead?\n\nClick "OK" for demo, "Cancel" to load from library.');
+                if (!this.currentNeuraProfile) {
+                    const useDemo = confirm('No Neura profile loaded. Would you like to use a demo profile instead?\n\nClick "OK" for demo, "Cancel" to load from library.');
                     if (useDemo) {
-                        this.loadDemoBrain();
+                        this.loadDemoProfile();
                         this.initializeReadyPlayerMe();
-                        this.updateNPIIntegrationPanel();
+                        this.updateNeuraIntegrationPanel();
                         return;
                     } else {
-                        this.showError('Please load an NPI brain first. You can:\n\n1. Use "Use Demo Brain" button\n2. Upload a .npibrain file\n3. Create one in the NPI Library');
+                        this.showError('Please load a Neura profile first. You can:\n\n1. Use "Use Demo Profile" button\n2. Upload a .neura file\n3. Create one in the Neura Library');
                         return;
                     }
                 }
 
                 this.showScreen('creation-screen');
                 this.initializeReadyPlayerMe();
-                this.updateNPIIntegrationPanel();
+                this.updateNeuraIntegrationPanel();
             }
 
             // === ADDED: Load from library method ===
@@ -734,7 +807,7 @@
                 window.open('library.html', '_blank');
                 
                 // Show instructions
-                this.showSuccess('Opening NPI Library...\n\n1. Select an NPI from your library\n2. Click "Avatar" button on the NPI card\n3. Return to this tab to continue');
+                this.showSuccess('Opening Neura Library...\n\n1. Select a profile from your library\n2. Click "Avatar" button on the profile card\n3. Return to this tab to continue');
                 
                 // Set up a listener for when the user returns
                 this.setupLibraryReturnListener();
@@ -742,26 +815,33 @@
 
             // === ADDED: Library return listener ===
             setupLibraryReturnListener() {
-                // Check every second if we have an NPI from the library
+                // Check every second if we have a profile from the library
                 const checkInterval = setInterval(() => {
                     try {
-                        const storedNPI = localStorage.getItem('current_npi_for_avatar');
-                        if (storedNPI) {
-                            this.currentNPIBrain = JSON.parse(storedNPI);
-                            localStorage.removeItem('current_npi_for_avatar');
-                            clearInterval(checkInterval);
+                        const storedTransfer = localStorage.getItem('current_npi_for_avatar');
+                        if (storedTransfer) {
+                            const transferData = JSON.parse(storedTransfer);
+                            const currentUser = auth.getCurrentUser();
                             
-                            this.displayFileInfo({ name: this.currentNPIBrain.metadata?.name + ".npibrain" });
-                            document.getElementById('file-info').classList.add('show');
-                            this.showSuccess(`✅ Loaded "${this.currentNPIBrain.metadata?.name}" from library!`);
-                            
-                            // If we're already on creation screen, update it
-                            if (document.getElementById('creation-screen').classList.contains('active')) {
-                                this.updateNPIIntegrationPanel();
+                            if (transferData.userId && currentUser && transferData.userId === currentUser.id) {
+                                this.currentNeuraProfile = transferData.profileData;
+                                localStorage.removeItem('current_npi_for_avatar');
+                                clearInterval(checkInterval);
+                                
+                                this.displayFileInfo({ name: this.currentNeuraProfile.metadata?.name + ".neura" });
+                                document.getElementById('file-info').classList.add('show');
+                                this.showSuccess(`✅ Loaded "${this.currentNeuraProfile.metadata?.name}" from library!`);
+                                
+                                // If we're already on creation screen, update it
+                                if (document.getElementById('creation-screen').classList.contains('active')) {
+                                    this.updateNeuraIntegrationPanel();
+                                } else {
+                                    this.proceedToAvatar();
+                                }
                             }
                         }
                     } catch (error) {
-                        console.error('Error checking for library NPI:', error);
+                        console.error('Error checking for library profile:', error);
                         clearInterval(checkInterval);
                     }
                 }, 1000);
@@ -784,9 +864,9 @@
                 
                 // Reset state
                 this.avatarUrl = null;
-                finalizeBtn.disabled = false; // Keep enabled for manual flow
+                finalizeBtn.disabled = false;
                 statusElement.className = 'avatar-status waiting';
-                statusElement.textContent = `Loading NPI Platform Avatar Creator...`;
+                statusElement.textContent = `Loading Neura Platform Avatar Creator...`;
                 
                 // Build the URL with frameApi
                 let url = `https://${this.subdomain}.readyplayer.me/avatar`;
@@ -916,38 +996,38 @@
                 }
             }
 
-            updateNPIIntegrationPanel() {
-                if (!this.currentNPIBrain) return;
+            updateNeuraIntegrationPanel() {
+                if (!this.currentNeuraProfile) return;
 
-                const brain = this.currentNPIBrain;
-                const statsContainer = document.getElementById('npi-stats');
+                const profile = this.currentNeuraProfile;
+                const statsContainer = document.getElementById('neura-stats');
                 
                 // Update stats
                 statsContainer.innerHTML = `
                     <div class="stat-card">
-                        <div class="stat-number">${brain.brain_architecture?.neural_network?.nodes || '25'}</div>
+                        <div class="stat-number">${profile.brain_architecture?.neural_network?.nodes || '25'}</div>
                         <div class="stat-label">Neural Nodes</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">${brain.brain_architecture?.moral_framework?.principles?.length || '5'}</div>
+                        <div class="stat-number">${profile.brain_architecture?.moral_framework?.principles?.length || '5'}</div>
                         <div class="stat-label">Core Principles</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">${Object.keys(brain.brain_architecture?.emotional_system?.triggers || {}).length}</div>
+                        <div class="stat-number">${Object.keys(profile.brain_architecture?.emotional_system?.triggers || {}).length}</div>
                         <div class="stat-label">Emotional Triggers</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">${brain.brain_architecture?.reasoning_system?.default_style?.split('_').length || '2'}</div>
+                        <div class="stat-number">${profile.brain_architecture?.reasoning_system?.default_style?.split('_').length || '2'}</div>
                         <div class="stat-label">Reasoning Styles</div>
                     </div>
                 `;
 
-                // Update personality configuration based on NPI brain
-                this.configurePersonalityTraits(brain);
+                // Update personality configuration based on Neura profile
+                this.configurePersonalityTraits(profile);
             }
 
-            configurePersonalityTraits(brain) {
-                const reasoningStyle = brain.brain_architecture?.reasoning_system?.default_style;
+            configurePersonalityTraits(profile) {
+                const reasoningStyle = profile.brain_architecture?.reasoning_system?.default_style;
                 
                 // Configure traits based on reasoning style
                 if (reasoningStyle === 'principled_directness') {
@@ -1006,7 +1086,7 @@
                     preview.innerHTML = `
                         <model-viewer
                             src="${this.avatarUrl}"
-                            alt="Your NPI Avatar"
+                            alt="Your Neura Avatar"
                             auto-rotate
                             camera-controls
                             style="width: 100%; height: 100%;">
@@ -1016,9 +1096,9 @@
                     preview.innerHTML = `
                         <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
                             <div class="demo-avatar">✅</div>
-                            <p style="margin-top: 1rem;">Your NPI Avatar is Ready!</p>
+                            <p style="margin-top: 1rem;">Your Neura Avatar is Ready!</p>
                             <p><small>Avatar URL: ${this.avatarUrl}</small></p>
-                            <p><small>Your avatar has been integrated with your NPI personality traits</small></p>
+                            <p><small>Your avatar has been integrated with your Neura personality traits</small></p>
                         </div>
                     `;
                 }
@@ -1028,20 +1108,20 @@
 
             updateFinalStats() {
                 const finalStats = document.getElementById('final-stats');
-                const brain = this.currentNPIBrain;
+                const profile = this.currentNeuraProfile;
                 
                 finalStats.innerHTML = `
                     <div class="stat-card">
-                        <div class="stat-number">${brain.metadata?.name || 'My NPI'}</div>
+                        <div class="stat-number">${profile.metadata?.name || 'My Neura Profile'}</div>
                         <div class="stat-label">Avatar Name</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">${brain.brain_architecture?.reasoning_system?.default_style || 'balanced'}</div>
+                        <div class="stat-number">${profile.brain_architecture?.reasoning_system?.default_style || 'balanced'}</div>
                         <div class="stat-label">Personality Type</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">Integrated</div>
-                        <div class="stat-label">NPI Status</div>
+                        <div class="stat-label">Neura Status</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">v1.0</div>
@@ -1066,24 +1146,24 @@
                     avatar: {
                         glb_url: this.avatarUrl,
                         created: new Date().toISOString(),
-                        npi_integration: true,
+                        neura_integration: true,
                         configuration: this.avatarConfig
                     },
-                    npi_brain: this.currentNPIBrain,
+                    neura_profile: this.currentNeuraProfile,
                     configuration: {
                         personality_traits: this.getCurrentTraits(),
                         export_formats: ['glb', 'fbx', 'vrm'],
                         compatible_platforms: ['web', 'unity', 'unreal', 'vrchat']
                     },
                     metadata: {
-                        exporter: "NPI Avatar Creator v1.0",
+                        exporter: "Neura Avatar Creator v1.0",
                         export_date: new Date().toISOString(),
                         subdomain: this.subdomain
                     }
                 };
 
-                this.downloadJSON(exportData, `npi_avatar_${this.currentNPIBrain.metadata?.name || 'avatar'}_${Date.now()}.json`);
-                alert('✅ Avatar exported successfully!\n\nThe export package includes your avatar model and NPI configuration.');
+                this.downloadJSON(exportData, `neura_avatar_${this.currentNeuraProfile.metadata?.name || 'avatar'}_${Date.now()}.json`);
+                alert('✅ Avatar exported successfully!\n\nThe export package includes your avatar model and Neura configuration.');
             }
 
             downloadJSON(data, filename) {
@@ -1103,42 +1183,42 @@
                     expressiveness: document.getElementById('expressiveness-value').textContent,
                     animation_style: document.getElementById('animation-value').textContent,
                     voice_tone: document.getElementById('voice-value').textContent,
-                    reasoning_style: this.currentNPIBrain.brain_architecture?.reasoning_system?.default_style || 'balanced'
+                    reasoning_style: this.currentNeuraProfile.brain_architecture?.reasoning_system?.default_style || 'balanced'
                 };
             }
 
             exportForUnreal() {
                 const exportData = {
                     avatar_url: this.avatarUrl,
-                    npi_configuration: this.getCurrentTraits(),
+                    neura_configuration: this.getCurrentTraits(),
                     unreal_engine: {
                         skeleton: 'UE_Mannequin',
-                        animation_blueprint: 'NPI_AnimationBP',
-                        behavior_tree: 'NPI_BehaviorTree'
+                        animation_blueprint: 'Neura_AnimationBP',
+                        behavior_tree: 'Neura_BehaviorTree'
                     }
                 };
                 
-                this.downloadJSON(exportData, `npi_avatar_unreal_${Date.now()}.json`);
-                alert('🚀 Unreal Engine Export\n\nYour avatar configuration has been exported for Unreal Engine with MetaHuman compatibility and NPI behavior tree integration.');
+                this.downloadJSON(exportData, `neura_avatar_unreal_${Date.now()}.json`);
+                alert('🚀 Unreal Engine Export\n\nYour avatar configuration has been exported for Unreal Engine with MetaHuman compatibility and Neura behavior tree integration.');
             }
 
             exportForUnity() {
                 const exportData = {
                     avatar_url: this.avatarUrl,
-                    npi_configuration: this.getCurrentTraits(),
+                    neura_configuration: this.getCurrentTraits(),
                     unity: {
-                        prefab_name: 'NPI_Avatar',
-                        animation_controller: 'NPI_AnimationController',
-                        script_component: 'NPI_PersonalityController'
+                        prefab_name: 'Neura_Avatar',
+                        animation_controller: 'Neura_AnimationController',
+                        script_component: 'Neura_PersonalityController'
                     }
                 };
                 
-                this.downloadJSON(exportData, `npi_avatar_unity_${Date.now()}.json`);
-                alert('🎮 Unity Export\n\nYour avatar configuration has been exported for Unity as a prefab with NPI personality controller and animation overrides.');
+                this.downloadJSON(exportData, `neura_avatar_unity_${Date.now()}.json`);
+                alert('🎮 Unity Export\n\nYour avatar configuration has been exported for Unity as a prefab with Neura personality controller and animation overrides.');
             }
 
             startOver() {
-                this.currentNPIBrain = null;
+                this.currentNeuraProfile = null;
                 this.avatarUrl = null;
                 this.avatarConfig = {};
                 document.getElementById('file-info').classList.remove('show');
@@ -1149,19 +1229,19 @@
             }
 
             showDemo() {
-                alert('🎭 NPI Avatar Creator Demo\n\n1. Upload your .npibrain file\n2. Create avatar with Ready Player Me\n3. Automatic personality configuration\n4. Export for games and virtual worlds\n\nClick "Start Avatar Creation" to begin!');
+                alert('🎭 Neura Avatar Creator Demo\n\n1. Upload your .neura file\n2. Create avatar with Ready Player Me\n3. Automatic personality configuration\n4. Export for games and virtual worlds\n\nClick "Start Avatar Creation" to begin!');
             }
 
-            // === MODIFIED: Added integration panel update ===
-            loadDemoBrain() {
-                // Load a demo NPI brain
-                this.currentNPIBrain = {
-                    npi_spec_version: "1.0",
+            // === ENHANCED: Load demo profile with integration panel update ===
+            loadDemoProfile() {
+                // Load a demo Neura profile
+                this.currentNeuraProfile = {
+                    neura_spec_version: "1.0",
                     metadata: {
-                        name: "Demo NPI Brain",
-                        creator: "NPI Platform",
+                        name: "Demo Neura Profile",
+                        creator: "Neura Platform",
                         created_date: new Date().toISOString(),
-                        npi_type: "nurture_based",
+                        profile_type: "nurture_based",
                         version: "1.0.0"
                     },
                     brain_architecture: {
@@ -1205,24 +1285,24 @@
                     }
                 };
 
-                this.displayFileInfo({ name: "demo.npibrain" });
+                this.displayFileInfo({ name: "demo.neura" });
                 document.getElementById('file-info').classList.add('show');
                 document.getElementById('loading').classList.remove('show');
                 
-                // === ADDED: Update the integration panel if we're already on creation screen ===
+                // Update the integration panel if we're already on creation screen
                 if (document.getElementById('creation-screen').classList.contains('active')) {
-                    this.updateNPIIntegrationPanel();
+                    this.updateNeuraIntegrationPanel();
                 }
             }
         }
 
         // === INITIALIZATION ===
-        console.log('🎭 Initializing NPI Avatar Creator...');
-        window.app = new NPIAvatarCreator();
+        console.log('🎭 Initializing Neura Avatar Creator...');
+        window.app = new NeuraAvatarCreator();
         
         document.addEventListener('DOMContentLoaded', () => {
             window.app.setupEventListeners();
-            console.log('✅ NPI Avatar Creator ready!');
+            console.log('✅ Neura Avatar Creator ready!');
         });
     </script>
 </body>
