@@ -1,4 +1,3 @@
-<!-- Save this as library.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -510,24 +509,46 @@
                         </div>
                     </div>
 
-                    <div class="npi-card" onclick="app.showScreen('template-screen')" style="cursor: pointer;">
+                    <div class="npi-card" onclick="app.createFromTemplate('analytical')" style="cursor: pointer;">
                         <div class="npi-card-header">
-                            <h3 class="npi-name">From Template</h3>
-                            <span class="npi-type">Starter</span>
+                            <h3 class="npi-name">Analytical Thinker</h3>
+                            <span class="npi-type">Template</span>
                         </div>
-                        <p>Start with pre-built personality templates and customize them to your needs.</p>
+                        <p>Start with a logical, data-driven personality template perfect for analytical tasks and reasoning.</p>
                         <div class="npi-stats">
                             <div class="stat">
-                                <div class="stat-number">10+</div>
-                                <div class="stat-label">Templates</div>
+                                <div class="stat-number">🧠</div>
+                                <div class="stat-label">Logical</div>
                             </div>
                             <div class="stat">
-                                <div class="stat-number">🎭</div>
-                                <div class="stat-label">Personalities</div>
+                                <div class="stat-number">📊</div>
+                                <div class="stat-label">Data-driven</div>
                             </div>
                             <div class="stat">
-                                <div class="stat-number">🔄</div>
-                                <div class="stat-label">Customizable</div>
+                                <div class="stat-number">⚖️</div>
+                                <div class="stat-label">Balanced</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="npi-card" onclick="app.createFromTemplate('creative')" style="cursor: pointer;">
+                        <div class="npi-card-header">
+                            <h3 class="npi-name">Creative Explorer</h3>
+                            <span class="npi-type">Template</span>
+                        </div>
+                        <p>Begin with an imaginative, innovative personality ideal for creative projects and brainstorming.</p>
+                        <div class="npi-stats">
+                            <div class="stat">
+                                <div class="stat-number">🎨</div>
+                                <div class="stat-label">Creative</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">💡</div>
+                                <div class="stat-label">Innovative</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">🚀</div>
+                                <div class="stat-label">Visionary</div>
                             </div>
                         </div>
                     </div>
@@ -557,11 +578,12 @@
                 </div>
 
                 <div style="margin-top: 2rem; padding: 1.5rem; background: #f7fafc; border-radius: 8px;">
-                    <h3>Import from URL</h3>
-                    <p>Import an NPI brain from a public URL (GitHub Gist, etc.)</p>
-                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                        <input type="text" id="import-url" placeholder="https://gist.github.com/..." style="flex: 1; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px;">
-                        <button class="btn-primary" onclick="app.importFromURL()">Import</button>
+                    <h3>Quick Demo NPIs</h3>
+                    <p>Start with these pre-built NPI examples</p>
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                        <button class="btn-secondary" onclick="app.createDemoNPI('balanced')">Balanced Analyst</button>
+                        <button class="btn-secondary" onclick="app.createDemoNPI('empathetic')">Empathic Listener</button>
+                        <button class="btn-secondary" onclick="app.createDemoNPI('strategic')">Strategic Planner</button>
                     </div>
                 </div>
             </div>
@@ -574,20 +596,6 @@
                 
                 <div id="npi-detail-content">
                     <!-- NPI details will be populated here -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Template Screen -->
-        <div id="template-screen" class="screen">
-            <div class="container">
-                <button class="back-button" onclick="app.showScreen('create-screen')">← Back to Creation</button>
-                
-                <h1>Choose a Template</h1>
-                <p class="subtitle">Start with a pre-built personality template</p>
-
-                <div id="template-grid">
-                    <!-- Templates will be populated here -->
                 </div>
             </div>
         </div>
@@ -912,35 +920,9 @@
                 this.showSuccess(`Exported ${this.npis.length} NPIs successfully!`);
             }
 
-            importFromURL() {
-                const url = document.getElementById('import-url').value;
-                if (!url) {
-                    this.showError('Please enter a URL');
-                    return;
-                }
-
-                const loading = document.getElementById('loading');
-                loading.classList.add('show');
-
-                fetch(url)
-                    .then(response => response.json())
-                    .then(npiData => {
-                        this.addNPI(npiData);
-                        this.showScreen('library-screen');
-                        document.getElementById('import-url').value = '';
-                    })
-                    .catch(error => {
-                        this.showError('Failed to import from URL: ' + error.message);
-                    })
-                    .finally(() => {
-                        loading.classList.remove('show');
-                    });
-            }
-
             // === CREATION METHODS ===
             launchProfiler() {
                 window.open('profiler.html', '_blank');
-                // The profiler will handle saving to library via localStorage
             }
 
             createQuickNPI() {
@@ -980,12 +962,123 @@
                 this.showScreen('library-screen');
             }
 
+            createFromTemplate(templateType) {
+                const templates = {
+                    analytical: {
+                        name: "Analytical Thinker",
+                        reasoning: "principled_directness",
+                        mood: "analytical_calm",
+                        traits: ["logical", "data-driven", "systematic"]
+                    },
+                    creative: {
+                        name: "Creative Explorer", 
+                        reasoning: "creative_exploration",
+                        mood: "inspired_curious",
+                        traits: ["imaginative", "innovative", "visionary"]
+                    }
+                };
+
+                const template = templates[templateType] || templates.analytical;
+
+                const templateNPI = {
+                    npi_spec_version: "1.0",
+                    metadata: {
+                        name: template.name + " - " + new Date().toLocaleDateString(),
+                        creator: "template",
+                        created_date: new Date().toISOString(),
+                        npi_type: "template_based",
+                        questions_answered: 0
+                    },
+                    brain_architecture: {
+                        neural_network: {
+                            nodes: 20,
+                            connections: 60
+                        },
+                        reasoning_system: {
+                            default_style: template.reasoning,
+                            decision_frameworks: ["pattern_recognition", "hypothesis_testing"]
+                        },
+                        emotional_system: {
+                            base_mood: template.mood,
+                            triggers: {},
+                            recovery_patterns: ["analysis", "creative_expression"]
+                        },
+                        moral_framework: {
+                            principles: [
+                                { name: "Truth Seeking", strength: 0.8 },
+                                { name: "Innovation", strength: 0.7 }
+                            ]
+                        }
+                    }
+                };
+
+                this.addNPI(templateNPI);
+                this.showScreen('library-screen');
+            }
+
+            createDemoNPI(type) {
+                const demos = {
+                    balanced: {
+                        name: "Balanced Analyst",
+                        reasoning: "balanced_analysis",
+                        principles: ["Truth", "Fairness", "Growth"]
+                    },
+                    empathetic: {
+                        name: "Empathic Listener", 
+                        reasoning: "empathetic_care",
+                        principles: ["Compassion", "Understanding", "Support"]
+                    },
+                    strategic: {
+                        name: "Strategic Planner",
+                        reasoning: "principled_directness", 
+                        principles: ["Efficiency", "Planning", "Execution"]
+                    }
+                };
+
+                const demo = demos[type] || demos.balanced;
+
+                const demoNPI = {
+                    npi_spec_version: "1.0",
+                    metadata: {
+                        name: demo.name,
+                        creator: "demo",
+                        created_date: new Date().toISOString(),
+                        npi_type: "demo",
+                        questions_answered: 0
+                    },
+                    brain_architecture: {
+                        neural_network: {
+                            nodes: 25,
+                            connections: 80
+                        },
+                        reasoning_system: {
+                            default_style: demo.reasoning,
+                            decision_frameworks: ["experience_based", "principle_driven"]
+                        },
+                        emotional_system: {
+                            base_mood: "balanced_calm",
+                            triggers: {},
+                            recovery_patterns: ["reflection", "adaptation"]
+                        },
+                        moral_framework: {
+                            principles: demo.principles.map((name, i) => ({
+                                name: name,
+                                strength: 0.7 + (i * 0.1)
+                            }))
+                        }
+                    }
+                };
+
+                this.addNPI(demoNPI);
+                this.showScreen('library-screen');
+            }
+
             launchAvatarCreator(npiId) {
                 const npi = this.getNPI(npiId);
                 if (npi) {
                     // Store the selected NPI for the avatar creator
                     localStorage.setItem('current_npi_for_avatar', JSON.stringify(npi.data));
-                    window.open('avatar.html', '_blank');
+                    this.showSuccess(`"${npi.name}" sent to Avatar Creator! Return to the Avatar Creator tab to continue.`);
                 } else {
                     this.showError('NPI not found');
                 }
