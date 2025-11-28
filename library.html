@@ -1,0 +1,1088 @@
+<!-- Save this as library.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPI Library - Manage Your Digital Minds</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4a5568;
+            --primary-dark: #2d3748;
+            --secondary: #718096;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --accent: #667eea;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --danger: #e53e3e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .btn-primary, .btn-secondary, .btn-success, .btn-danger {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+        }
+
+        .library-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .library-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .npi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .npi-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .npi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: var(--accent);
+        }
+
+        .npi-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .npi-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .npi-type {
+            background: var(--light);
+            color: var(--secondary);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .npi-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--secondary);
+        }
+
+        .npi-traits {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .trait {
+            background: var(--primary);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .npi-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .npi-action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-secondary {
+            background: var(--light);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .action-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .import-area {
+            border: 3px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            margin: 2rem 0;
+            background: #f7fafc;
+            transition: all 0.3s ease;
+        }
+
+        .import-area:hover {
+            border-color: var(--primary);
+            background: #edf2f7;
+        }
+
+        .import-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #718096;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .npi-detail-view {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid #e2e8f0;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .detail-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .detail-stat {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .detail-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .detail-section h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .back-button {
+            background: var(--light);
+            color: var(--primary);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+                padding: 1.5rem;
+            }
+            
+            .library-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .npi-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .npi-actions {
+                flex-direction: column;
+            }
+        }
+
+        .success-message {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .error-message {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Main Library Screen -->
+        <div id="library-screen" class="screen active">
+            <div class="container">
+                <div class="library-header">
+                    <div>
+                        <h1>NPI Library</h1>
+                        <p class="subtitle">Manage Your Digital Minds</p>
+                    </div>
+                    <div class="library-actions">
+                        <button class="btn-primary" onclick="app.showScreen('create-screen')">Create New NPI</button>
+                        <button class="btn-secondary" onclick="app.showScreen('import-screen')">Import NPI</button>
+                        <button class="btn-success" onclick="app.exportAllNPIs()">Export All</button>
+                    </div>
+                </div>
+
+                <div class="success-message" id="success-message"></div>
+                <div class="error-message" id="error-message"></div>
+
+                <div id="npi-grid-container">
+                    <!-- NPI cards will be populated here -->
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn-secondary" onclick="window.location.href='index.html'">← Back to Platform</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create NPI Screen -->
+        <div id="create-screen" class="screen">
+            <div class="container">
+                <button class="back-button" onclick="app.showScreen('library-screen')">← Back to Library</button>
+                
+                <h1>Create New NPI</h1>
+                <p class="subtitle">Choose how you want to create your digital mind</p>
+
+                <div class="npi-grid">
+                    <div class="npi-card" onclick="app.launchProfiler()" style="cursor: pointer;">
+                        <div class="npi-card-header">
+                            <h3 class="npi-name">Complete Profiler</h3>
+                            <span class="npi-type">Recommended</span>
+                        </div>
+                        <p>Use our comprehensive 47-question profiler to build a detailed NPI based on your personality, values, and experiences.</p>
+                        <div class="npi-stats">
+                            <div class="stat">
+                                <div class="stat-number">47</div>
+                                <div class="stat-label">Questions</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">30-45</div>
+                                <div class="stat-label">Minutes</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">⭐</div>
+                                <div class="stat-label">Detailed</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="npi-card" onclick="app.createQuickNPI()" style="cursor: pointer;">
+                        <div class="npi-card-header">
+                            <h3 class="npi-name">Quick Setup</h3>
+                            <span class="npi-type">Basic</span>
+                        </div>
+                        <p>Create a basic NPI with essential personality traits for quick testing and development.</p>
+                        <div class="npi-stats">
+                            <div class="stat">
+                                <div class="stat-number">5</div>
+                                <div class="stat-label">Minutes</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">⚡</div>
+                                <div class="stat-label">Fast</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">🎯</div>
+                                <div class="stat-label">Essential</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="npi-card" onclick="app.showScreen('template-screen')" style="cursor: pointer;">
+                        <div class="npi-card-header">
+                            <h3 class="npi-name">From Template</h3>
+                            <span class="npi-type">Starter</span>
+                        </div>
+                        <p>Start with pre-built personality templates and customize them to your needs.</p>
+                        <div class="npi-stats">
+                            <div class="stat">
+                                <div class="stat-number">10+</div>
+                                <div class="stat-label">Templates</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">🎭</div>
+                                <div class="stat-label">Personalities</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">🔄</div>
+                                <div class="stat-label">Customizable</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Import Screen -->
+        <div id="import-screen" class="screen">
+            <div class="container">
+                <button class="back-button" onclick="app.showScreen('library-screen')">← Back to Library</button>
+                
+                <h1>Import NPI Brain</h1>
+                <p class="subtitle">Upload your .npibrain files or import from other sources</p>
+
+                <div class="import-area" id="import-area">
+                    <div class="import-icon">📁</div>
+                    <h3>Drag & Drop Your .npibrain File</h3>
+                    <p>or click to browse your files</p>
+                    <input type="file" id="file-input" class="file-input" accept=".npibrain,.json">
+                    <button class="btn-primary" onclick="document.getElementById('file-input').click()">Choose File</button>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Importing NPI brain...</p>
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1.5rem; background: #f7fafc; border-radius: 8px;">
+                    <h3>Import from URL</h3>
+                    <p>Import an NPI brain from a public URL (GitHub Gist, etc.)</p>
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <input type="text" id="import-url" placeholder="https://gist.github.com/..." style="flex: 1; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px;">
+                        <button class="btn-primary" onclick="app.importFromURL()">Import</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NPI Detail Screen -->
+        <div id="detail-screen" class="screen">
+            <div class="container">
+                <button class="back-button" onclick="app.showScreen('library-screen')">← Back to Library</button>
+                
+                <div id="npi-detail-content">
+                    <!-- NPI details will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Template Screen -->
+        <div id="template-screen" class="screen">
+            <div class="container">
+                <button class="back-button" onclick="app.showScreen('create-screen')">← Back to Creation</button>
+                
+                <h1>Choose a Template</h1>
+                <p class="subtitle">Start with a pre-built personality template</p>
+
+                <div id="template-grid">
+                    <!-- Templates will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === COMPLETE NPI LIBRARY SYSTEM ===
+        class NPILibrary {
+            constructor() {
+                this.npis = this.loadNPIs();
+                this.currentNPI = null;
+                console.log('📚 NPI Library initialized with', this.npis.length, 'NPIs');
+            }
+
+            // === STORAGE MANAGEMENT ===
+            loadNPIs() {
+                try {
+                    const stored = localStorage.getItem('npi_library');
+                    return stored ? JSON.parse(stored) : [];
+                } catch (error) {
+                    console.error('Error loading NPIs:', error);
+                    return [];
+                }
+            }
+
+            saveNPIs() {
+                try {
+                    localStorage.setItem('npi_library', JSON.stringify(this.npis));
+                    console.log('💾 NPIs saved:', this.npis.length);
+                } catch (error) {
+                    console.error('Error saving NPIs:', error);
+                    this.showError('Failed to save NPIs to storage');
+                }
+            }
+
+            // === NPI MANAGEMENT ===
+            addNPI(npiData) {
+                const npi = {
+                    id: 'npi_' + Date.now(),
+                    name: npiData.metadata?.name || 'Unnamed NPI',
+                    type: npiData.metadata?.npi_type || 'custom',
+                    created: new Date().toISOString(),
+                    updated: new Date().toISOString(),
+                    data: npiData,
+                    stats: this.calculateStats(npiData)
+                };
+                
+                this.npis.unshift(npi); // Add to beginning
+                this.saveNPIs();
+                this.renderLibrary();
+                this.showSuccess(`NPI "${npi.name}" created successfully!`);
+                return npi;
+            }
+
+            updateNPI(id, updates) {
+                const index = this.npis.findIndex(npi => npi.id === id);
+                if (index !== -1) {
+                    this.npis[index] = { ...this.npis[index], ...updates, updated: new Date().toISOString() };
+                    this.saveNPIs();
+                    this.renderLibrary();
+                    this.showSuccess('NPI updated successfully!');
+                }
+            }
+
+            deleteNPI(id) {
+                const npi = this.npis.find(n => n.id === id);
+                if (npi && confirm(`Are you sure you want to delete "${npi.name}"? This action cannot be undone.`)) {
+                    this.npis = this.npis.filter(n => n.id !== id);
+                    this.saveNPIs();
+                    this.renderLibrary();
+                    this.showSuccess(`NPI "${npi.name}" deleted successfully`);
+                }
+            }
+
+            getNPI(id) {
+                return this.npis.find(npi => npi.id === id);
+            }
+
+            // === RENDERING ===
+            renderLibrary() {
+                const container = document.getElementById('npi-grid-container');
+                
+                if (this.npis.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📚</div>
+                            <h3>No NPIs Yet</h3>
+                            <p>Create your first digital mind to get started</p>
+                            <button class="btn-primary" onclick="app.showScreen('create-screen')">Create Your First NPI</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = this.npis.map(npi => `
+                    <div class="npi-card">
+                        <div class="npi-card-header">
+                            <h3 class="npi-name">${npi.name}</h3>
+                            <span class="npi-type">${npi.type}</span>
+                        </div>
+                        
+                        <div class="npi-stats">
+                            <div class="stat">
+                                <div class="stat-number">${npi.stats.nodes}</div>
+                                <div class="stat-label">Nodes</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${npi.stats.principles}</div>
+                                <div class="stat-label">Principles</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${npi.stats.questions}</div>
+                                <div class="stat-label">Questions</div>
+                            </div>
+                        </div>
+
+                        <div class="npi-traits">
+                            ${npi.stats.traits.slice(0, 3).map(trait => `
+                                <span class="trait">${trait}</span>
+                            `).join('')}
+                            ${npi.stats.traits.length > 3 ? `<span class="trait">+${npi.stats.traits.length - 3}</span>` : ''}
+                        </div>
+
+                        <p style="color: #718096; font-size: 0.9rem; margin: 0.5rem 0;">
+                            Created: ${new Date(npi.created).toLocaleDateString()}
+                        </p>
+
+                        <div class="npi-actions">
+                            <button class="npi-action-btn action-primary" onclick="app.viewNPI('${npi.id}')">View</button>
+                            <button class="npi-action-btn action-secondary" onclick="app.exportNPI('${npi.id}')">Export</button>
+                            <button class="npi-action-btn action-secondary" onclick="app.launchAvatarCreator('${npi.id}')">Avatar</button>
+                            <button class="npi-action-btn action-danger" onclick="app.deleteNPI('${npi.id}')">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderNPIDetail(id) {
+                const npi = this.getNPI(id);
+                if (!npi) return;
+
+                const container = document.getElementById('npi-detail-content');
+                container.innerHTML = `
+                    <div class="detail-header">
+                        <div>
+                            <h1>${npi.name}</h1>
+                            <p class="subtitle">${npi.type} • Created ${new Date(npi.created).toLocaleDateString()}</p>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button class="btn-primary" onclick="app.exportNPI('${npi.id}')">Export</button>
+                            <button class="btn-secondary" onclick="app.launchAvatarCreator('${npi.id}')">Create Avatar</button>
+                            <button class="btn-danger" onclick="app.deleteNPI('${npi.id}')">Delete</button>
+                        </div>
+                    </div>
+
+                    <div class="detail-stats">
+                        <div class="detail-stat">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">${npi.stats.nodes}</div>
+                            <div>Neural Nodes</div>
+                        </div>
+                        <div class="detail-stat">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">${npi.stats.principles}</div>
+                            <div>Core Principles</div>
+                        </div>
+                        <div class="detail-stat">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">${npi.stats.questions}</div>
+                            <div>Questions Answered</div>
+                        </div>
+                        <div class="detail-stat">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">${npi.stats.connections}</div>
+                            <div>Connections</div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h3>Personality Traits</h3>
+                        <div class="npi-traits">
+                            ${npi.stats.traits.map(trait => `
+                                <span class="trait">${trait}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h3>Reasoning System</h3>
+                        <p><strong>Default Style:</strong> ${npi.data.brain_architecture?.reasoning_system?.default_style || 'balanced_analysis'}</p>
+                        <p><strong>Base Mood:</strong> ${npi.data.brain_architecture?.emotional_system?.base_mood || 'reflective_calm'}</p>
+                    </div>
+
+                    <div class="detail-section">
+                        <h3>Moral Framework</h3>
+                        ${npi.data.brain_architecture?.moral_framework?.principles ? `
+                            <ul style="margin-left: 1.5rem;">
+                                ${npi.data.brain_architecture.moral_framework.principles.map(p => `
+                                    <li><strong>${p.name}:</strong> ${(p.strength * 100).toFixed(0)}% strength</li>
+                                `).join('')}
+                            </ul>
+                        ` : '<p>No principles defined</p>'}
+                    </div>
+
+                    <div class="detail-section">
+                        <h3>Technical Details</h3>
+                        <p><strong>NPI Spec Version:</strong> ${npi.data.npi_spec_version || '1.0'}</p>
+                        <p><strong>Created:</strong> ${new Date(npi.data.metadata?.created_date || npi.created).toLocaleString()}</p>
+                        <p><strong>Type:</strong> ${npi.data.metadata?.npi_type || 'nurture_based'}</p>
+                    </div>
+                `;
+            }
+
+            // === UTILITIES ===
+            calculateStats(npiData) {
+                return {
+                    nodes: npiData.brain_architecture?.neural_network?.nodes || 25,
+                    connections: npiData.brain_architecture?.neural_network?.connections || 75,
+                    principles: npiData.brain_architecture?.moral_framework?.principles?.length || 3,
+                    questions: npiData.metadata?.questions_answered || 0,
+                    traits: this.extractTraits(npiData)
+                };
+            }
+
+            extractTraits(npiData) {
+                const traits = [];
+                const reasoning = npiData.brain_architecture?.reasoning_system?.default_style;
+                if (reasoning) traits.push(reasoning.replace(/_/g, ' '));
+                
+                const mood = npiData.brain_architecture?.emotional_system?.base_mood;
+                if (mood) traits.push(mood.replace(/_/g, ' '));
+                
+                // Add some default traits based on common patterns
+                traits.push('experience-based', 'value-driven', 'adaptive');
+                
+                return traits.slice(0, 6); // Limit to 6 traits
+            }
+
+            // === SCREEN MANAGEMENT ===
+            showScreen(screenId) {
+                document.querySelectorAll('.screen').forEach(screen => {
+                    screen.classList.remove('active');
+                });
+                document.getElementById(screenId).classList.add('active');
+                
+                if (screenId === 'library-screen') {
+                    this.renderLibrary();
+                }
+            }
+
+            viewNPI(id) {
+                this.currentNPI = id;
+                this.renderNPIDetail(id);
+                this.showScreen('detail-screen');
+            }
+
+            // === IMPORT/EXPORT ===
+            importNPI(file) {
+                const loading = document.getElementById('loading');
+                loading.classList.add('show');
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const npiData = JSON.parse(e.target.result);
+                        
+                        // Validate it's an NPI brain file
+                        if (!npiData.npi_spec_version || !npiData.brain_architecture) {
+                            throw new Error('Invalid NPI brain file format');
+                        }
+
+                        this.addNPI(npiData);
+                        this.showScreen('library-screen');
+                        
+                    } catch (error) {
+                        this.showError('Invalid NPI brain file: ' + error.message);
+                    } finally {
+                        loading.classList.remove('show');
+                    }
+                };
+                
+                reader.onerror = () => {
+                    loading.classList.remove('show');
+                    this.showError('Error reading file');
+                };
+                
+                reader.readAsText(file);
+            }
+
+            exportNPI(id) {
+                const npi = this.getNPI(id);
+                if (!npi) return;
+
+                const blob = new Blob([JSON.stringify(npi.data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${npi.name.replace(/[^a-z0-9]/gi, '_')}.npibrain`;
+                link.click();
+                URL.revokeObjectURL(url);
+                
+                this.showSuccess(`NPI "${npi.name}" exported successfully!`);
+            }
+
+            exportAllNPIs() {
+                if (this.npis.length === 0) {
+                    this.showError('No NPIs to export');
+                    return;
+                }
+
+                const exportData = {
+                    export_version: "1.0",
+                    exported_at: new Date().toISOString(),
+                    total_npis: this.npis.length,
+                    npis: this.npis.map(npi => npi.data)
+                };
+
+                const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `npi_library_backup_${Date.now()}.json`;
+                link.click();
+                URL.revokeObjectURL(url);
+                
+                this.showSuccess(`Exported ${this.npis.length} NPIs successfully!`);
+            }
+
+            importFromURL() {
+                const url = document.getElementById('import-url').value;
+                if (!url) {
+                    this.showError('Please enter a URL');
+                    return;
+                }
+
+                const loading = document.getElementById('loading');
+                loading.classList.add('show');
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(npiData => {
+                        this.addNPI(npiData);
+                        this.showScreen('library-screen');
+                        document.getElementById('import-url').value = '';
+                    })
+                    .catch(error => {
+                        this.showError('Failed to import from URL: ' + error.message);
+                    })
+                    .finally(() => {
+                        loading.classList.remove('show');
+                    });
+            }
+
+            // === CREATION METHODS ===
+            launchProfiler() {
+                window.open('profiler.html', '_blank');
+                // The profiler will handle saving to library via localStorage
+            }
+
+            createQuickNPI() {
+                const quickNPI = {
+                    npi_spec_version: "1.0",
+                    metadata: {
+                        name: "Quick NPI - " + new Date().toLocaleDateString(),
+                        creator: "quick_setup",
+                        created_date: new Date().toISOString(),
+                        npi_type: "quick_build",
+                        questions_answered: 0
+                    },
+                    brain_architecture: {
+                        neural_network: {
+                            nodes: 15,
+                            connections: 45
+                        },
+                        reasoning_system: {
+                            default_style: "balanced_analysis",
+                            decision_frameworks: ["utility_based", "experience_informed"]
+                        },
+                        emotional_system: {
+                            base_mood: "neutral_calm",
+                            triggers: {},
+                            recovery_patterns: ["analysis", "distraction"]
+                        },
+                        moral_framework: {
+                            principles: [
+                                { name: "Basic Fairness", strength: 0.7 },
+                                { name: "Personal Growth", strength: 0.6 }
+                            ]
+                        }
+                    }
+                };
+
+                this.addNPI(quickNPI);
+                this.showScreen('library-screen');
+            }
+
+            launchAvatarCreator(npiId) {
+                const npi = this.getNPI(npiId);
+                if (npi) {
+                    // Store the selected NPI for the avatar creator
+                    localStorage.setItem('current_npi_for_avatar', JSON.stringify(npi.data));
+                    window.open('avatar.html', '_blank');
+                } else {
+                    this.showError('NPI not found');
+                }
+            }
+
+            // === UI HELPERS ===
+            showSuccess(message) {
+                const element = document.getElementById('success-message');
+                element.textContent = message;
+                element.classList.add('show');
+                setTimeout(() => element.classList.remove('show'), 3000);
+            }
+
+            showError(message) {
+                const element = document.getElementById('error-message');
+                element.textContent = message;
+                element.classList.add('show');
+                setTimeout(() => element.classList.remove('show'), 5000);
+            }
+
+            // === INITIALIZATION ===
+            initialize() {
+                this.setupEventListeners();
+                this.renderLibrary();
+                console.log('✅ NPI Library ready');
+            }
+
+            setupEventListeners() {
+                // File import handling
+                const fileInput = document.getElementById('file-input');
+                const importArea = document.getElementById('import-area');
+                
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file && (file.name.endsWith('.npibrain') || file.name.endsWith('.json'))) {
+                        this.importNPI(file);
+                    } else {
+                        this.showError('Please select a valid .npibrain or .json file');
+                    }
+                });
+
+                // Drag and drop
+                importArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    importArea.style.borderColor = 'var(--primary)';
+                    importArea.style.background = '#edf2f7';
+                });
+
+                importArea.addEventListener('dragleave', () => {
+                    importArea.style.borderColor = '#cbd5e0';
+                    importArea.style.background = '#f7fafc';
+                });
+
+                importArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    importArea.style.borderColor = '#cbd5e0';
+                    importArea.style.background = '#f7fafc';
+                    
+                    const file = e.dataTransfer.files[0];
+                    if (file && (file.name.endsWith('.npibrain') || file.name.endsWith('.json'))) {
+                        this.importNPI(file);
+                    } else {
+                        this.showError('Please drop a valid .npibrain or .json file');
+                    }
+                });
+            }
+        }
+
+        // === GLOBAL ACCESS ===
+        window.app = new NPILibrary();
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.app.initialize();
+        });
+
+        // Listen for NPI creations from other pages
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'npi_library') {
+                window.app.npis = window.app.loadNPIs();
+                window.app.renderLibrary();
+            }
+        });
+
+        // Check if we have a new NPI to add (from profiler)
+        window.addEventListener('load', () => {
+            const newNPI = localStorage.getItem('new_npi_created');
+            if (newNPI) {
+                try {
+                    const npiData = JSON.parse(newNPI);
+                    window.app.addNPI(npiData);
+                    localStorage.removeItem('new_npi_created');
+                } catch (error) {
+                    console.error('Error processing new NPI:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
