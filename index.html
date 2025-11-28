@@ -4,8 +4,351 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NPI Profiler - Create Your Digital Mind</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/questionnaire.css">
+    <style>
+        /* === STYLE.CSS === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .screen {
+            display: none;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .welcome-content {
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .welcome-content p {
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #4a5568;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2d3748;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+        /* === QUESTIONNAIRE.CSS === */
+        .progress-container {
+            margin-bottom: 2rem;
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4a5568, #2d3748);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .section-header h2 {
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-description {
+            color: #718096;
+            font-style: italic;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .question {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #4a5568;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .question-hint {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .text-response {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.3s ease;
+            line-height: 1.5;
+        }
+
+        .text-response:focus {
+            outline: none;
+            border-color: #4a5568;
+            box-shadow: 0 0 0 3px rgba(74, 85, 104, 0.1);
+        }
+
+        .response-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .char-count {
+            font-weight: 600;
+        }
+
+        .question-progress {
+            font-style: italic;
+        }
+
+        .scale-response {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .min-label, .max-label {
+            font-size: 0.9rem;
+        }
+
+        .scale-slider {
+            width: 100%;
+            margin: 1rem 0;
+            height: 6px;
+            border-radius: 3px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .scale-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4a5568;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .scale-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4a5568;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .scale-value {
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .current-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4a5568;
+        }
+
+        .value-label {
+            color: #718096;
+            margin-left: 0.5rem;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .section-info {
+            color: #718096;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .analysis-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #4a5568;
+        }
+
+        .step-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .brain-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat {
+            text-align: center;
+            font-weight: bold;
+            color: #4a5568;
+        }
+
+        #brain-canvas {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: #f7fafc;
+            margin: 0 auto;
+            display: block;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .export-options {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .section-info {
+                order: -1;
+            }
+            
+            .export-options {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -18,9 +361,9 @@
                     <p>This guided process will help build a digital brain based on your life experiences, personality, and values.</p>
                     <p><strong>Time required:</strong> 30-45 minutes</p>
                     <p><strong>Questions:</strong> 47 comprehensive questions about your life and personality</p>
-                    <button id="start-btn" class="btn-primary">Begin Creation</button>
-                    <div id="emergency-button" style="display: none; margin-top: 1rem;">
-                        <button class="btn-primary" onclick="window.startApp()">Emergency Start</button>
+                    <button id="start-btn" class="btn-primary" onclick="window.startQuestionnaire()">Begin Creation</button>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn-secondary" onclick="testButton()">Test Button</button>
                     </div>
                 </div>
             </div>
@@ -38,8 +381,8 @@
                 
                 <div class="question-section">
                     <div class="section-header">
-                        <h2 id="section-title">Section Title</h2>
-                        <p id="section-description" class="section-description"></p>
+                        <h2 id="section-title">Life Experiences & Development</h2>
+                        <p id="section-description" class="section-description">These questions explore your early formative experiences and how they shaped your fundamental sense of safety and understanding.</p>
                     </div>
                     
                     <div id="question-container">
@@ -48,13 +391,13 @@
                 </div>
 
                 <div class="navigation">
-                    <button id="prev-btn" class="btn-secondary">
+                    <button id="prev-btn" class="btn-secondary" onclick="app.handlePrevious()">
                         <span class="nav-icon">←</span> Previous
                     </button>
                     <div class="section-info">
-                        Section <span id="current-section">1</span> of <span id="total-sections">5</span>
+                        Section <span id="current-section">1</span> of <span id="total-sections">2</span>
                     </div>
-                    <button id="next-btn" class="btn-primary">
+                    <button id="next-btn" class="btn-primary" onclick="app.handleNext()">
                         Next <span class="nav-icon">→</span>
                     </button>
                 </div>
@@ -94,20 +437,372 @@
                     <div id="brain-visualization"></div>
                 </div>
                 <div class="export-options">
-                    <button id="export-btn" class="btn-primary">Download .npibrain File</button>
-                    <button id="avatar-btn" class="btn-secondary">Continue to Avatar Creator</button>
+                    <button id="export-btn" class="btn-primary" onclick="app.exportNPIBrain()">Download .npibrain File</button>
+                    <button id="avatar-btn" class="btn-secondary" onclick="alert('Avatar Creator coming soon!')">Continue to Avatar Creator</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Files -->
-    <script src="./js/questionnaire-engine.js"></script>
-    <script src="./js/personality-analyzer.js"></script>
-    <script src="./js/brain-generator.js"></script>
-    <script src="./js/exporter.js"></script>
-    <script src="./js/utils/neural-helpers.js"></script>
-    <script src="./js/utils/validation.js"></script>
-    <script src="./js/app.js"></script>
+    <script>
+        // === SIMPLE TEST FUNCTION ===
+        function testButton() {
+            alert('✅ Test button works! The JavaScript is loading correctly.');
+            console.log('✅ Test button clicked - JavaScript is working');
+        }
+
+        // === SIMPLE QUESTIONNAIRE ENGINE ===
+        class SimpleQuestionnaire {
+            constructor() {
+                this.currentSection = 0;
+                this.currentQuestion = 0;
+                this.responses = {};
+                this.sections = [
+                    {
+                        id: "developmental_history",
+                        name: "Life Experiences & Development", 
+                        description: "These questions explore your early formative experiences.",
+                        questions: [
+                            {
+                                id: "early_childhood_moments",
+                                text: "When you think back to your early childhood, what moments stand out the most emotionally?",
+                                type: "text",
+                                maxLength: 1500,
+                                placeholder: "Describe significant childhood moments..."
+                            },
+                            {
+                                id: "childhood_safety", 
+                                text: "Can you describe a time when you felt very safe or very unsafe as a child?",
+                                type: "text",
+                                maxLength: 1200
+                            }
+                        ]
+                    },
+                    {
+                        id: "personality_assessment",
+                        name: "Personality Assessment",
+                        description: "Scientific personality assessment to map your fundamental traits.",
+                        questions: [
+                            {
+                                id: "big5_openness",
+                                text: "How open are you to new experiences? (1- Very traditional to 10- Very adventurous)",
+                                type: "scale",
+                                min: 1,
+                                max: 10
+                            }
+                        ]
+                    }
+                ];
+                console.log('✅ SimpleQuestionnaire loaded with', this.sections.length, 'sections');
+            }
+
+            getCurrentQuestion() {
+                const section = this.sections[this.currentSection];
+                return section ? section.questions[this.currentQuestion] : null;
+            }
+
+            getTotalQuestions() {
+                return this.sections.reduce((total, section) => total + section.questions.length, 0);
+            }
+
+            getAnsweredCount() {
+                return Object.keys(this.responses).length;
+            }
+
+            getProgress() {
+                const total = this.getTotalQuestions();
+                return total > 0 ? (this.getAnsweredCount() / total) * 100 : 0;
+            }
+
+            saveResponse(questionId, response) {
+                this.responses[questionId] = {
+                    value: response,
+                    timestamp: new Date().toISOString()
+                };
+            }
+
+            nextQuestion() {
+                const currentSection = this.sections[this.currentSection];
+                
+                if (this.currentQuestion < currentSection.questions.length - 1) {
+                    this.currentQuestion++;
+                    return true;
+                } else if (this.currentSection < this.sections.length - 1) {
+                    this.currentSection++;
+                    this.currentQuestion = 0;
+                    return true;
+                }
+                return false;
+            }
+
+            previousQuestion() {
+                if (this.currentQuestion > 0) {
+                    this.currentQuestion--;
+                    return true;
+                } else if (this.currentSection > 0) {
+                    this.currentSection--;
+                    this.currentQuestion = this.sections[this.currentSection].questions.length - 1;
+                    return true;
+                }
+                return false;
+            }
+
+            getAllResponses() {
+                return this.responses;
+            }
+        }
+
+        // === SIMPLE APP ===
+        class SimpleNPIApp {
+            constructor() {
+                console.log('🚀 SimpleNPIApp starting...');
+                this.questionnaire = new SimpleQuestionnaire();
+                this.setupDirectEventListeners();
+                console.log('✅ SimpleNPIApp ready!');
+            }
+
+            setupDirectEventListeners() {
+                // These are already handled by onclick attributes, but just in case
+                console.log('🔗 Setting up direct event listeners...');
+            }
+
+            startQuestionnaire() {
+                console.log('🎯 Starting questionnaire...');
+                this.showScreen('questionnaire-screen');
+                this.renderCurrentQuestion();
+            }
+
+            handleNext() {
+                console.log('➡️ Next clicked');
+                this.saveCurrentResponse();
+                if (this.questionnaire.nextQuestion()) {
+                    this.renderCurrentQuestion();
+                } else {
+                    this.startAnalysis();
+                }
+            }
+
+            handlePrevious() {
+                console.log('⬅️ Previous clicked');
+                this.saveCurrentResponse();
+                if (this.questionnaire.previousQuestion()) {
+                    this.renderCurrentQuestion();
+                }
+            }
+
+            showScreen(screenId) {
+                console.log('🖥️ Showing screen:', screenId);
+                document.querySelectorAll('.screen').forEach(screen => {
+                    screen.classList.remove('active');
+                });
+                document.getElementById(screenId).classList.add('active');
+            }
+
+            renderCurrentQuestion() {
+                const question = this.questionnaire.getCurrentQuestion();
+                const container = document.getElementById('question-container');
+                
+                if (!question) return;
+
+                this.updateProgressDisplay();
+                
+                let questionHTML = '';
+                if (question.type === 'text') {
+                    questionHTML = this.renderTextQuestion(question);
+                } else if (question.type === 'scale') {
+                    questionHTML = this.renderScaleQuestion(question);
+                }
+
+                container.innerHTML = questionHTML;
+                this.attachQuestionEventListeners();
+            }
+
+            renderTextQuestion(question) {
+                const existingResponse = this.questionnaire.responses[question.id];
+                const currentLength = existingResponse ? existingResponse.value.length : 0;
+                
+                return `
+                    <div class="question">
+                        <div class="question-text">${question.text}</div>
+                        ${question.placeholder ? `<div class="question-hint">${question.placeholder}</div>` : ''}
+                        <textarea class="text-response" 
+                                  data-question-id="${question.id}"
+                                  placeholder="Share your experience here..."
+                                  maxlength="${question.maxLength}">${existingResponse ? existingResponse.value : ''}</textarea>
+                        <div class="response-meta">
+                            <div class="char-count"><span>${currentLength}</span> / ${question.maxLength} characters</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderScaleQuestion(question) {
+                const existingResponse = this.questionnaire.responses[question.id];
+                const defaultValue = existingResponse ? existingResponse.value : 5;
+                
+                return `
+                    <div class="question">
+                        <div class="question-text">${question.text}</div>
+                        <div class="scale-response">
+                            <div class="scale-labels">
+                                <span class="min-label">${question.min}</span>
+                                <span class="max-label">${question.max}</span>
+                            </div>
+                            <input type="range" 
+                                   data-question-id="${question.id}"
+                                   min="${question.min}" 
+                                   max="${question.max}" 
+                                   value="${defaultValue}"
+                                   class="scale-slider">
+                            <div class="scale-value">
+                                <span class="current-value">${defaultValue}</span>
+                                <span class="value-label">/ ${question.max}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            attachQuestionEventListeners() {
+                // Text area character count
+                document.querySelectorAll('.text-response').forEach(textarea => {
+                    textarea.addEventListener('input', (e) => {
+                        const charCount = e.target.parentElement.querySelector('.char-count span');
+                        if (charCount) charCount.textContent = e.target.value.length;
+                    });
+                });
+
+                // Scale slider value display
+                document.querySelectorAll('.scale-slider').forEach(slider => {
+                    slider.addEventListener('input', (e) => {
+                        const valueDisplay = e.target.parentElement.querySelector('.current-value');
+                        if (valueDisplay) valueDisplay.textContent = e.target.value;
+                    });
+                });
+            }
+
+            saveCurrentResponse() {
+                const question = this.questionnaire.getCurrentQuestion();
+                if (!question) return;
+
+                let responseValue = '';
+
+                if (question.type === 'text') {
+                    const textarea = document.querySelector(`[data-question-id="${question.id}"]`);
+                    responseValue = textarea ? textarea.value : '';
+                } else if (question.type === 'scale') {
+                    const slider = document.querySelector(`[data-question-id="${question.id}"]`);
+                    responseValue = slider ? slider.value : '';
+                }
+
+                if (responseValue !== '') {
+                    this.questionnaire.saveResponse(question.id, responseValue);
+                }
+            }
+
+            updateProgressDisplay() {
+                const progressFill = document.getElementById('progress-fill');
+                const progressText = document.getElementById('progress-text');
+                const progress = this.questionnaire.getProgress();
+                
+                progressFill.style.width = `${progress}%`;
+                progressText.textContent = `${Math.round(progress)}% Complete`;
+            }
+
+            async startAnalysis() {
+                console.log('🔬 Starting analysis...');
+                this.showScreen('analysis-screen');
+                
+                // Simulate analysis
+                const steps = [
+                    "Processing your responses...",
+                    "Analyzing personality patterns...", 
+                    "Building neural network...",
+                    "Finalizing NPI profile..."
+                ];
+
+                for (let step of steps) {
+                    this.addAnalysisStep(step);
+                    await this.delay(1000);
+                }
+
+                this.showScreen('export-screen');
+                this.renderNPISummary();
+            }
+
+            addAnalysisStep(message) {
+                const progressContainer = document.getElementById('analysis-progress');
+                const newStep = document.createElement('div');
+                newStep.className = 'analysis-step';
+                newStep.innerHTML = `
+                    <span class="step-icon">✅</span>
+                    <span class="step-text">${message}</span>
+                `;
+                progressContainer.appendChild(newStep);
+                
+                // Update stats
+                const nodes = Math.floor(Math.random() * 20) + 5;
+                const connections = Math.floor(Math.random() * 30) + 10;
+                const principles = Math.floor(Math.random() * 8) + 2;
+                
+                document.getElementById('node-count').textContent = nodes;
+                document.getElementById('connection-count').textContent = connections;
+                document.getElementById('principle-count').textContent = principles;
+            }
+
+            renderNPISummary() {
+                document.getElementById('npi-stats').innerHTML = `
+                    <div style="text-align: center;">
+                        <h3>Your Personal NPI</h3>
+                        <p><strong>Status:</strong> Ready for export</p>
+                        <p><strong>Questions answered:</strong> ${this.questionnaire.getAnsweredCount()}</p>
+                        <p><strong>Created:</strong> ${new Date().toLocaleDateString()}</p>
+                    </div>
+                `;
+            }
+
+            exportNPIBrain() {
+                const brainData = {
+                    name: "My Personal NPI",
+                    created: new Date().toISOString(),
+                    responses: this.questionnaire.getAllResponses()
+                };
+                
+                const blob = new Blob([JSON.stringify(brainData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `my_npi_brain_${Date.now()}.npibrain`;
+                link.click();
+                URL.revokeObjectURL(url);
+                
+                alert('✅ Your NPI brain has been exported!');
+            }
+
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // === GLOBAL FUNCTIONS ===
+        window.startQuestionnaire = function() {
+            console.log('🌐 Global start function called');
+            if (!window.app) {
+                console.log('🔄 Creating new app instance');
+                window.app = new SimpleNPIApp();
+            }
+            window.app.startQuestionnaire();
+        };
+
+        // === INITIALIZATION ===
+        console.log('📄 Script loaded, initializing app...');
+        window.app = new SimpleNPIApp();
+        console.log('🎉 App initialized successfully! Try clicking "Begin Creation"');
+        
+        // Test that everything is working
+        setTimeout(() => {
+            console.log('✅ App is ready! Check the console for messages.');
+        }, 1000);
+    </script>
 </body>
 </html>
