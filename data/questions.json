@@ -15,129 +15,15 @@
         {
           "id": "childhood_safety",
           "text": "Can you describe a time when you felt very safe or very unsafe as a child?",
-          "type": "text", 
+          "type": "text",
           "maxLength": 1200,
           "placeholder": "What was happening? Who was there? How did your body feel?"
-        },
-        {
-          "id": "adult_responses",
-          "text": "How did the adults around you respond when you needed comfort or help?",
-          "type": "text",
-          "maxLength": 1000,
-          "placeholder": "Think about parents, teachers, relatives... what patterns did you notice?"
-        },
-        {
-          "id": "understood_misunderstood",
-          "text": "What's a memory where you felt deeply understood or deeply misunderstood?",
-          "type": "text",
-          "maxLength": 1200,
-          "placeholder": "What was the situation? What made you feel seen or invisible?"
         }
       ]
     },
     {
-      "id": "social_life_peer_dynamics", 
-      "name": "Social Life, Bullying & Peer Dynamics",
-      "description": "Explore your social development and how interactions with peers shaped your self-image and social patterns.",
-      "questions": [
-        {
-          "id": "social_place",
-          "text": "How would you describe your social place growing up?",
-          "type": "text",
-          "maxLength": 800,
-          "placeholder": "Were you popular, quiet, athletic, artistic, an outsider, a leader?"
-        },
-        {
-          "id": "treated_differently",
-          "text": "Were there moments other kids treated you differently—better or worse? What do you think influenced that?",
-          "type": "text",
-          "maxLength": 1000
-        },
-        {
-          "id": "humiliation_memory",
-          "text": "Can you share a memory where someone embarrassed, mocked, or humiliated you? What stood out about you in that situation (height, looks, clothing, personality, interests, etc.)?",
-          "type": "text", 
-          "maxLength": 1200
-        },
-        {
-          "id": "respected_admired",
-          "text": "What's a memory where someone made you feel respected, admired, or valued?",
-          "type": "text",
-          "maxLength": 1000
-        },
-        {
-          "id": "bullying_experience",
-          "text": "If you experienced bullying or exclusion, what do you think people focused on or targeted?",
-          "type": "text",
-          "maxLength": 900
-        }
-      ]
-    },
-    {
-      "id": "stressful_transformative",
-      "name": "Stressful, Dangerous, or Transformative Moments", 
-      "description": "Critical moments that changed your worldview, sense of safety, or forced you to grow up quickly.",
-      "questions": [
-        {
-          "id": "trust_changed",
-          "text": "Can you describe an event that changed how you view people or trust?",
-          "type": "text",
-          "maxLength": 1100
-        },
-        {
-          "id": "danger_safety",
-          "text": "What's an experience that shaped your sense of danger or safety?",
-          "type": "text",
-          "maxLength": 1000
-        },
-        {
-          "id": "act_older",
-          "text": "Was there a moment when you had to act older or stronger than you were?",
-          "type": "text",
-          "maxLength": 900
-        },
-        {
-          "id": "stressful_changed_you",
-          "text": "What stressful or frightening memories do you feel changed how you react today?",
-          "type": "text",
-          "maxLength": 1200
-        }
-      ]
-    },
-    {
-      "id": "identity_pride_shame",
-      "name": "Identity, Pride & Shame Memories",
-      "description": "Moments that defined your sense of self, worth, and identity formation.",
-      "questions": [
-        {
-          "id": "first_pride",
-          "text": "What's the first moment in your life that made you feel proud of yourself?",
-          "type": "text",
-          "maxLength": 800
-        },
-        {
-          "id": "this_is_who_i_am",
-          "text": "Can you recall a moment that made you think, 'This is who I am'?",
-          "type": "text",
-          "maxLength": 900
-        },
-        {
-          "id": "not_good_enough",
-          "text": "What's an experience that made you feel not good enough or inadequate?",
-          "type": "text", 
-          "maxLength": 1000
-        },
-        {
-          "id": "words_changed_you",
-          "text": "Has someone's words ever permanently changed how you see yourself?",
-          "type": "text",
-          "maxLength": 1000
-        }
-      ]
-    },
-    {
-      "id": "personality_assessment", 
-      "name": "Core Personality Assessment",
+      "id": "personality_assessment",
+      "name": "Core Personality Assessment", 
       "description": "Scientific personality assessment to map your fundamental traits and tendencies.",
       "questions": [
         {
@@ -157,36 +43,8 @@
           "max": 10,
           "minLabel": "Very Spontaneous",
           "maxLabel": "Very Organized"
-        },
-        {
-          "id": "big5_extraversion",
-          "text": "How much do you enjoy social interaction and gain energy from being around others?",
-          "type": "scale",
-          "min": 1,
-          "max": 10, 
-          "minLabel": "Very Introverted",
-          "maxLabel": "Very Extraverted"
-        },
-        {
-          "id": "big5_agreeableness",
-          "text": "How compassionate, cooperative, and trusting are you toward others?",
-          "type": "scale",
-          "min": 1,
-          "max": 10,
-          "minLabel": "Very Challenging", 
-          "maxLabel": "Very Agreeable"
-        },
-        {
-          "id": "big5_neuroticism",
-          "text": "How sensitive are you to stress and negative emotions?",
-          "type": "scale",
-          "min": 1,
-          "max": 10,
-          "minLabel": "Very Resilient",
-          "maxLabel": "Very Sensitive"
         }
       ]
     }
-    // ... Continue with all your other sections
   ]
 }
